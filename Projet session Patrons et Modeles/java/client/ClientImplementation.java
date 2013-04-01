@@ -1,15 +1,53 @@
 package client;
 
-public class ClientImplementation
+import interfaces.ClientInterface;
+
+import javax.jws.WebService;
+
+
+
+/**
+ * 
+ * Implémente l'interface du client.
+ * 
+ * @author Valentin Brémond
+ * 
+ * @version 1.0
+ *
+ */
+@WebService (endpointInterface = "interfaces.ClientInterface")
+public class ClientImplementation implements ClientInterface
 {
-
+	private Client client;
+	
+	
+	
+	// CONSTRUCTEURS
+	
+	
+	
 	/**
-	 * @param args
+	 * Constructeur par valeurs.
+	 * 
+	 * @param client Le Client qui instancie ce ClientImplementation.
 	 */
-	public static void main (String[] args)
+	public ClientImplementation (Client client)
 	{
-		// TODO Auto-generated method stub
-
+		this.client = client;
 	}
-
+	
+	
+	
+	// MÉTHODES
+	
+	
+	
+	@Override
+	public boolean envoyerInformation (String info)
+	{
+		// Met à jour l'information du client
+		client.setInfo (info);
+		
+		return true;
+	}
 }

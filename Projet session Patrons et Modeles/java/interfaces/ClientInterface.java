@@ -21,7 +21,7 @@ import javax.jws.soap.SOAPBinding.Style;
 public interface ClientInterface
 {
 	/**
-	 * Permet d'envoyer des informations à un client.
+	 * Permet à un broker d'envoyer des informations à un client.
 	 * 
 	 * @param info L'information à envoyer.
 	 * 

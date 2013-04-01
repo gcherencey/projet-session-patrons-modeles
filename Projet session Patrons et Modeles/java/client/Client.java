@@ -1,12 +1,15 @@
 package client;
 
+import fournisseur.HelloWorldImplementation;
 import interfaces.BrokerInterface;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Observable;
 
 import javax.swing.JOptionPane;
 import javax.xml.namespace.QName;
+import javax.xml.ws.Endpoint;
 import javax.xml.ws.Service;
 
 
@@ -20,7 +23,7 @@ import javax.xml.ws.Service;
  * @version 1.0
  *
  */
-public class Client
+public class Client extends Observable
 {
 	/**
 	 * L'URL du broker.
@@ -31,6 +34,11 @@ public class Client
 	 * L'interface du broker.
 	 */
 	private BrokerInterface interfaceBroker;
+	
+	/**
+	 * L'information envoyée par le broker.
+	 */
+	private String info;
 	
 	
 	
@@ -43,6 +51,9 @@ public class Client
 	 */
 	public Client ()
 	{
+		// On créé notre WSDL et notre interface
+		Endpoint.publish ("http://localhost:9999/client", new ClientImplementation (this));
+		
 		// On demande l'URL du broker
 		this.urlBroker = JOptionPane.showInputDialog(null, "Veuillez entrer l'adresse IP du broker", "Adresse du broker", JOptionPane.QUESTION_MESSAGE);
 		
@@ -67,7 +78,7 @@ public class Client
 		}
 		
 		// Puis on lance la fenêtre graphique
-		new ClientGraphique ();
+		new ClientGraphique (this);
 	}
 	
 	
@@ -98,6 +109,21 @@ public class Client
 	    
 	    // Puis on renvoie l'interface
 	    return service.getPort (BrokerInterface.class);
+	}
+	
+	
+	
+	/**
+	 * Permer de mettre à jour l'information à transmettre au graphique.
+	 * 
+	 * @param info L'information à afficher par la partie graphique.
+	 */
+	public void setInfo (String info)
+	{
+		this.info = info;
+		
+		setChanged ();
+		notifyObservers (info);
 	}
 	
 	
