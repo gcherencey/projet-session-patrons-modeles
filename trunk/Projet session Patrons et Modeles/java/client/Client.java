@@ -1,6 +1,5 @@
 package client;
 
-import fournisseur.HelloWorldImplementation;
 import interfaces.BrokerInterface;
 
 import java.net.MalformedURLException;
@@ -123,7 +122,7 @@ public class Client extends Observable
 		this.info = info;
 		
 		setChanged ();
-		notifyObservers (info);
+		notifyObservers (this.info);
 	}
 	
 	

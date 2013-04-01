@@ -29,6 +29,9 @@ public class ClientGraphique extends JFrame implements ActionListener,Observer
 {
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * Stocke l'instance du Client.
+	 */
 	private Client client;
 	
 	private JButton boutonFermer;
@@ -106,14 +109,6 @@ public class ClientGraphique extends JFrame implements ActionListener,Observer
 	
 	
 	
-	public static void main (String[] args)
-	{
-		// TODO: remove
-		//new ClientGraphique (new Client ());
-	}
-
-
-
 	@Override
 	public void update (Observable arg0, Object arg1)
 	{
