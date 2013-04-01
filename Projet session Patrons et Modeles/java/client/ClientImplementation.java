@@ -18,6 +18,9 @@ import javax.jws.WebService;
 @WebService (endpointInterface = "interfaces.ClientInterface")
 public class ClientImplementation implements ClientInterface
 {
+	/**
+	 * Stocke l'instance du Client.
+	 */
 	private Client client;
 	
 	
