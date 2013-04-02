@@ -60,7 +60,7 @@ public class Client extends Observable
 		{
 			this.interfaceBroker = connexionBroker (urlBroker);
 		}
-		catch (Exception e)
+		catch (MalformedURLException e)
 		{
 			// Si l'URL n'est pas bonne, on affiche une erreur
 			JOptionPane.showMessageDialog (null, "Veuillez saisir une URL valide.", "URL non valide", JOptionPane.ERROR_MESSAGE);
@@ -97,13 +97,13 @@ public class Client extends Observable
 	private BrokerInterface connexionBroker (String url) throws MalformedURLException
 	{
 		// On créé l'URL
-		URL urlBroker = new URL (url);
+		URL broker = new URL (url);
 
 		// On créé le Qname
-	    QName qname = new QName ("http://interfaces/", "BrokerImplementationService");
+	    QName qname = new QName ("http://broker/", "BrokerImplementationService");
 	    
 	    // On créé le service
-	    Service service = Service.create (urlBroker, qname);
+	    Service service = Service.create (broker, qname);
 	    
 	    // Puis on renvoie l'interface
 	    return service.getPort (BrokerInterface.class);
