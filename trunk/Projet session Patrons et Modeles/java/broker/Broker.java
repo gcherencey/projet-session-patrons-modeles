@@ -60,7 +60,7 @@ public class Broker
 		else
 		{
 			
-			Iterator i = adressesIPClient.iterator(); // on crée un Iterator pour parcourir notre HashSet
+			Iterator i = adressesIPClient.iterator(); // on crÃ©e un Iterator pour parcourir notre HashSet
 			
 			while(i.hasNext()) // tant qu'on a un suivant
 			{

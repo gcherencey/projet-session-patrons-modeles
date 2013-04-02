@@ -112,6 +112,25 @@ public class Client extends Observable
 	
 	
 	/**
+	 * Permet de fermer l'application proprement.
+	 * 
+	 * @param clientGraphique Le ClientGraphique qui observe ce client.
+	 */
+	protected void fermerConnexion (ClientGraphique clientGraphique)
+	{
+		// On enlève l'observateur
+		deleteObserver (clientGraphique);
+		
+		// On se désabonne du broker
+		interfaceBroker.seDesabonner ();
+		
+		// Puis on quitte
+		System.exit (0);
+	}
+	
+	
+	
+	/**
 	 * Permer de mettre à jour l'information à transmettre au graphique.
 	 * 
 	 * @param info L'information à afficher par la partie graphique.
