@@ -20,7 +20,7 @@ public class HelloWorldImplementation implements HelloWorldInterface
 		@Override
 		public String getHelloWorld (String name)
 		{
-			
+	
 			// Permet de récupérer l'adresse du client
 			MessageContext mc = ws.getMessageContext ();
 			HttpExchange exchange = (HttpExchange) mc.get(JAXWSProperties.HTTP_EXCHANGE);

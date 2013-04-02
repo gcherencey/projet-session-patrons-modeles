@@ -44,7 +44,6 @@ public class Client extends Observable
 	// CONSTRUCTEURS
 	
 	
-	
 	/**
 	 * Constructeur par défaut.
 	 */
