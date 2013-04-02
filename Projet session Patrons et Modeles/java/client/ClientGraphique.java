@@ -97,12 +97,10 @@ public class ClientGraphique extends JFrame implements ActionListener,Observer
 		
 		if (evenement == boutonFermer)
 		{
-			// Si l'utilisateur veut fermer la fenêtre, on enlève l'observateur et on ferme tout
-			client.deleteObserver (this);
-			
+			// Si l'utilisateur veut fermer la fenêtre, on quitte l'application
 			this.dispose ();
 			
-			System.exit (0);
+			client.fermerConnexion (this);
 		}
 		
 	}
