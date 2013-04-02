@@ -120,10 +120,20 @@ public class Client extends Observable
 	{
 		this.info = info;
 		
-		System.out.println(info);
-		
 		setChanged ();
 		notifyObservers (this.info);
+	}
+	
+	
+	
+	/**
+	 * Permet de récupérer la dernière information.
+	 * 
+	 * @return La dernière information envoyée par le broker.
+	 */
+	public String getInfo ()
+	{
+		return this.info;
 	}
 	
 	
