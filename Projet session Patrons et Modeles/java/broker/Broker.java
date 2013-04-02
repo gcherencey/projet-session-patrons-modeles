@@ -70,6 +70,8 @@ public class Broker
 			Service service = Service.create(url, qname);
 	    
 			ClientInterface client = service.getPort (ClientInterface.class);
+			
+			System.out.println(info);
 			client.envoyerInformation(info);
 			
 			return true;

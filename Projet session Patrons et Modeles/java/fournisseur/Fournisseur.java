@@ -14,8 +14,9 @@ public class Fournisseur
 	/**
 	 * @param args
 	 * @throws MalformedURLException 
+	 * @throws InterruptedException 
 	 */
-	public static void main (String[] args) throws MalformedURLException
+	public static void main (String[] args) throws MalformedURLException, InterruptedException
 	{
 		// TODO Auto-generated method stub
 		URL url = new URL("http://localhost:9998/broker?wsdl");
@@ -31,10 +32,10 @@ public class Fournisseur
 	    while(true){
 	    	
 	    	for(int i=0; i<10; i++){
-	    	broker.envoyerInformation("Information : " + i );
+	    		broker.envoyerInformation("Information : " + i );
+	    		Thread.sleep(5000);
 	    	}
 	    }
-	    
 	   
 	}
 
