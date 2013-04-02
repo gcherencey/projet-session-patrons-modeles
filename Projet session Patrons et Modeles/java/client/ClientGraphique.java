@@ -113,6 +113,7 @@ public class ClientGraphique extends JFrame implements ActionListener,Observer
 	public void update (Observable arg0, Object arg1)
 	{
 		// Dès que le client reçoit une nouvelle information, on l'affiche
-		panelScrollPane.add (new JLabel ((String) arg1));
+		this.panelScrollPane.add (new JLabel ((String) arg1));
+		this.validate ();
 	}
 }
