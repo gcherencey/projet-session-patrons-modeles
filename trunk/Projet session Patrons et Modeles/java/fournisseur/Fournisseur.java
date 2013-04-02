@@ -33,7 +33,7 @@ public class Fournisseur
 	    	
 	    	for(int i=0; i<10; i++){
 	    		broker.envoyerInformation("Information : " + i );
-	    		Thread.sleep(5000);
+	    		Thread.sleep(1000);
 	    	}
 	    }
 	   
