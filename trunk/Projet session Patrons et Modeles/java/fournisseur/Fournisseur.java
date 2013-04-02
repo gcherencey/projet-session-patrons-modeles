@@ -18,7 +18,7 @@ public class Fournisseur
 	public static void main (String[] args) throws MalformedURLException
 	{
 		// TODO Auto-generated method stub
-		URL url = new URL("http://localhost:9999/broker?wsdl");
+		URL url = new URL("http://localhost:9998/broker?wsdl");
 		
 		//1st argument service URI, refer to wsdl document above
 		//2nd argument is service name, refer to wsdl document above
