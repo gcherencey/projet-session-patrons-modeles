@@ -2,6 +2,8 @@ package broker;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.xml.ws.Endpoint;
@@ -11,14 +13,12 @@ import javax.xml.ws.handler.MessageContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.xml.internal.ws.developer.JAXWSProperties;
 
-import client.ClientImplementation;
-
 public class Broker
 {
 	@Resource
 	WebServiceContext ws;
 	
-	private ArrayList<String> adressesIPClient = new ArrayList<String>();
+	private Set<String> adressesIPClient = new HashSet<String>();
 	
 	public Broker()
 	{
