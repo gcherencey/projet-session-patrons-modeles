@@ -1,13 +1,16 @@
 package broker;
 
+import interfaces.ClientInterface;
+
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.annotation.Resource;
+import javax.xml.namespace.QName;
 import javax.xml.ws.Endpoint;
-import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.Service;
 import javax.xml.ws.handler.MessageContext;
 
 import com.sun.net.httpserver.HttpExchange;
@@ -29,8 +32,6 @@ public class Broker
 		HttpExchange exchange = (HttpExchange) mc.get(JAXWSProperties.HTTP_EXCHANGE);
 		InetSocketAddress remoteAddress = exchange.getRemoteAddress();
 		String remoteHost = remoteAddress.getHostName();
-		System.out.println(remoteHost);
-		
 		adressesIPClient.add(remoteHost);
 		
 		return true;
@@ -56,8 +57,28 @@ public class Broker
 
 	public boolean envoyerInformation (String info)
 	{
-		System.out.println(info);
-		return true;
+		
+		URL url;
+		
+		try {
+			url = new URL("http://localhost:9999/client?wsdl");
+			
+			//1st argument service URI, refer to wsdl document above
+			//2nd argument is service name, refer to wsdl document above
+			QName qname = new QName("http://client/", "ClientImplementationService");
+	    
+			Service service = Service.create(url, qname);
+	    
+			ClientInterface client = service.getPort (ClientInterface.class);
+			client.envoyerInformation(info);
+			
+			return true;
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		
 	};
 	
 	/**
