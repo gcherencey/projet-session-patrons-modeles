@@ -107,8 +107,6 @@ public class ClientGraphique extends JFrame implements ActionListener,Observer
 		
 	}
 	
-	
-	
 	@Override
 	public void update (Observable arg0, Object arg1)
 	{

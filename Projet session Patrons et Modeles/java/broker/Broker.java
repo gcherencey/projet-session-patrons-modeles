@@ -6,6 +6,7 @@ import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
@@ -18,8 +19,6 @@ import com.sun.xml.internal.ws.developer.JAXWSProperties;
 
 public class Broker
 {
-	
-	
 	private Set<String> adressesIPClient = new HashSet<String>();
 	
 	public Broker()
@@ -44,43 +43,54 @@ public class Broker
 		InetSocketAddress remoteAddress = exchange.getRemoteAddress();
 		String remoteHost = remoteAddress.getHostName();
 		
-		if(!adressesIPClient.contains(remoteAddress))
-			return false;
-		
-		else
-		{
-			adressesIPClient.remove(remoteAddress);
-			return true;
-		}
-		
+		return adressesIPClient.remove(remoteHost);
 	};
 
 	public boolean envoyerInformation (String info)
 	{
 		
-		URL url;
+		System.out.println(adressesIPClient.toString());
 		
-		try {
-			url = new URL("http://localhost:9999/client?wsdl");
-			
-			//1st argument service URI, refer to wsdl document above
-			//2nd argument is service name, refer to wsdl document above
-			QName qname = new QName("http://client/", "ClientImplementationService");
-	    
-			Service service = Service.create(url, qname);
-	    
-			ClientInterface client = service.getPort (ClientInterface.class);
-			
-			System.out.println(info);
-			client.envoyerInformation(info);
-			
+		if (adressesIPClient.isEmpty())
+		{		
+			System.out.println("En attente de clients");
 			return true;
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
 		}
 		
+		else
+		{
+			
+			Iterator i = adressesIPClient.iterator(); // on crée un Iterator pour parcourir notre HashSet
+			
+			while(i.hasNext()) // tant qu'on a un suivant
+			{
+				URL url;
+				
+				try {
+					url = new URL("http://"+ (String) i.next() + ":9999/client?wsdl");
+					
+					//1st argument service URI, refer to wsdl document above
+					//2nd argument is service name, refer to wsdl document above
+					QName qname = new QName("http://client/", "ClientImplementationService");
+			    
+					Service service = Service.create(url, qname);
+			    
+					ClientInterface client = service.getPort (ClientInterface.class);
+					
+					System.out.println(info);
+					client.envoyerInformation(info);
+
+				} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return false;
+					
+				}	
+
+			}
+			return true;
+		}
+
 	};
 	
 	/**
