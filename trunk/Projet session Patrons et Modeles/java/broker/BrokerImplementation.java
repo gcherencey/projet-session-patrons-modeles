@@ -1,6 +1,15 @@
 package broker;
 
+import interfaces.ClientInterface;
+
+import java.net.URL;
+
+import javax.annotation.Resource;
 import javax.jws.WebService;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 
 
 @WebService (endpointInterface = "interfaces.BrokerInterface")
@@ -23,11 +32,13 @@ public class BrokerImplementation implements interfaces.BrokerInterface
 
 	}
 	
-	
+	@Resource
+	WebServiceContext ws;
 	@Override
 	public boolean sAbonner ()
 	{
-		broker.sAbonner();
+		MessageContext mc = ws.getMessageContext ();
+		broker.sAbonner(mc);
 		
 		return true;
 		
@@ -36,16 +47,16 @@ public class BrokerImplementation implements interfaces.BrokerInterface
 	@Override
 	public boolean seDesabonner ()
 	{
-		
-		broker.seDesabonner();
+		MessageContext mc = ws.getMessageContext ();
+		broker.seDesabonner(mc);
 		return true;
 		
 	};
 	
 	@Override
 	public boolean envoyerInformation (String info)
-	{
-		broker.envoyerInformation(info);
+	{	    
+	    broker.envoyerInformation(info);
 		return true;
 	};
 }

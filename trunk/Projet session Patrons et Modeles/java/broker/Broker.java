@@ -15,8 +15,7 @@ import com.sun.xml.internal.ws.developer.JAXWSProperties;
 
 public class Broker
 {
-	@Resource
-	WebServiceContext ws;
+	
 	
 	private Set<String> adressesIPClient = new HashSet<String>();
 	
@@ -24,23 +23,22 @@ public class Broker
 	{
 		Endpoint.publish ("http://localhost:9998/broker", new BrokerImplementation(this));
 	}
-
-	public boolean sAbonner ()
+	
+	public boolean sAbonner (MessageContext mc)
 	{
-		MessageContext mc = ws.getMessageContext ();
 		HttpExchange exchange = (HttpExchange) mc.get(JAXWSProperties.HTTP_EXCHANGE);
 		InetSocketAddress remoteAddress = exchange.getRemoteAddress();
 		String remoteHost = remoteAddress.getHostName();
+		System.out.println(remoteHost);
+		
 		adressesIPClient.add(remoteHost);
 		
 		return true;
 		
 	};
 	
-	public boolean seDesabonner ()
+	public boolean seDesabonner (MessageContext mc)
 	{
-		
-		MessageContext mc = ws.getMessageContext ();
 		HttpExchange exchange = (HttpExchange) mc.get(JAXWSProperties.HTTP_EXCHANGE);
 		InetSocketAddress remoteAddress = exchange.getRemoteAddress();
 		String remoteHost = remoteAddress.getHostName();

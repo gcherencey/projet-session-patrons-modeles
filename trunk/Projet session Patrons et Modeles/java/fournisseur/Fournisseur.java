@@ -28,9 +28,13 @@ public class Fournisseur
 	    
 	    BrokerInterface broker = service.getPort (BrokerInterface.class);
 	    
-	    for(int i=0; i<10; i++){
+	    while(true){
+	    	
+	    	for(int i=0; i<10; i++){
 	    	broker.envoyerInformation("Information : " + i );
+	    	}
 	    }
+	    
 	   
 	}
 
