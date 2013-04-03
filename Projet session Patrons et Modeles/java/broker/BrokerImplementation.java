@@ -82,15 +82,7 @@ public class BrokerImplementation implements interfaces.BrokerInterface
 	@Override
 	public boolean envoyerInformation (String info)
 	{	    
-	    reponse = broker.envoyerInformation(info);
+	    return broker.envoyerInformation(info);
 	    
-	    if (reponse == true){
-			System.out.println("Information envoyee avec succes");
-			return true;
-		}
-		else{
-			System.err.println("Erreur lors de l'envoi de l'information au client");
-			return false;
-		}
 	};
 }
