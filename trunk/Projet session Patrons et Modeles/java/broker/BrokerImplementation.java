@@ -5,6 +5,14 @@ import javax.jws.WebService;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 
+/* 
+* Implémente l'interface du broker.
+* 
+* @author Cherencey Gaylord
+* 
+* @version 1.0
+*
+*/
 
 @WebService (endpointInterface = "interfaces.BrokerInterface")
 public class BrokerImplementation implements interfaces.BrokerInterface
@@ -14,11 +22,17 @@ public class BrokerImplementation implements interfaces.BrokerInterface
 	 * Stocke l'instance du Broker.
 	 */
 	private Broker broker;
+	/**
+	 * Stocke le resultat des methodes appellees.
+	 */
+	private boolean reponse;
+	
+	//CONSTRUCTEURS
 	
 	/**
 	 * Constructeur par valeurs.
 	 * 
-	 * @param client Le Client qui instancie ce ClientImplementation.
+	 * @param broker Le Broker qui instancie ce BrokerImplementation.
 	 */
 	public BrokerImplementation(Broker broker) {
 		
@@ -28,13 +42,23 @@ public class BrokerImplementation implements interfaces.BrokerInterface
 	
 	@Resource
 	WebServiceContext ws;
+	
+	//METHODES
+	
 	@Override
 	public boolean sAbonner ()
 	{
 		MessageContext mc = ws.getMessageContext ();
-		broker.sAbonner(mc);
+		reponse = broker.sAbonner(mc);
 		
-		return true;
+		if (reponse == true){
+			System.out.println("Client rajoute avec succes");
+			return true;
+		}
+		else{
+			System.err.println("Erreur la de l'ajout du client");
+			return false;
+		}
 		
 	};
 		
@@ -42,15 +66,31 @@ public class BrokerImplementation implements interfaces.BrokerInterface
 	public boolean seDesabonner ()
 	{
 		MessageContext mc = ws.getMessageContext ();
-		broker.seDesabonner(mc);
-		return true;
+		reponse = broker.seDesabonner(mc);
+		
+		if (reponse == true){
+			System.out.println("Client desabonne avec succes");
+			return true;
+		}
+		else{
+			System.err.println("Erreur la de la suppression du client");
+			return false;
+		}
 		
 	};
 	
 	@Override
 	public boolean envoyerInformation (String info)
 	{	    
-	    broker.envoyerInformation(info);
-		return true;
+	    reponse = broker.envoyerInformation(info);
+	    
+	    if (reponse == true){
+			System.out.println("Information envoyee avec succes");
+			return true;
+		}
+		else{
+			System.err.println("Erreur lors de l'envoi de l'information au client");
+			return false;
+		}
 	};
 }
