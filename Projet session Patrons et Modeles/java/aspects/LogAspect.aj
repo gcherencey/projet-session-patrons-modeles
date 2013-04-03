@@ -1,12 +1,12 @@
 package aspects;
-import broker.Broker;
 
 
 public aspect LogAspect {
-	pointcut publicLog():call(public * Broker.*(..));
-	pointcut loggCalls(): publicLog();
+	
+	pointcut loggCalls():call(* broker.Broker.envoyerInformation*(..));
+
 	
 		after() : loggCalls() { 
-			System.out.println("Après le retrait"); 
+			System.out.println("Après envoie"); 
 		} 
 }
