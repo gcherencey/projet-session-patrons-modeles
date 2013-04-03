@@ -12,7 +12,6 @@ import javax.xml.ws.Endpoint;
 import javax.xml.ws.Service;
 
 
-
 /**
  * 
  * Le client qui va s'abonner au broker.
