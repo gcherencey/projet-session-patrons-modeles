@@ -131,7 +131,7 @@ public class Broker
 					client.envoyerInformation(info);
 
 				} catch (MalformedURLException e) {
-					System.err.println("URL invalide, impossible d'envoyer l'information a cette adresse : " + url);
+					
 					return false;
 				}	
 
