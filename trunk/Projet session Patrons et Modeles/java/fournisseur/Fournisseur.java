@@ -36,7 +36,7 @@ public class Fournisseur
 				URL url = new URL("http://localhost:9998/broker?wsdl");
 				// On cree le qname
 			    QName qname = new QName("http://broker/", "BrokerImplementationService");
-				// On cree le
+				// On cree le service
 			    Service service = Service.create(url, qname);
 			    //On cree une instance de l'interface broker
 			    BrokerInterface broker = service.getPort (BrokerInterface.class); 
