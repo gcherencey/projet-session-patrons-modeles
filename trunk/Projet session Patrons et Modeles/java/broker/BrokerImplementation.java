@@ -49,33 +49,14 @@ public class BrokerImplementation implements interfaces.BrokerInterface
 	public boolean sAbonner ()
 	{
 		MessageContext mc = ws.getMessageContext ();
-		reponse = broker.sAbonner(mc);
-		
-		if (reponse == true){
-			System.out.println("Client rajoute avec succes");
-			return true;
-		}
-		else{
-			System.err.println("Erreur la de l'ajout du client");
-			return false;
-		}
-		
+		return broker.sAbonner(mc);
 	};
 		
 	@Override
 	public boolean seDesabonner ()
 	{
 		MessageContext mc = ws.getMessageContext ();
-		reponse = broker.seDesabonner(mc);
-		
-		if (reponse == true){
-			System.out.println("Client desabonne avec succes");
-			return true;
-		}
-		else{
-			System.err.println("Erreur la de la suppression du client");
-			return false;
-		}
+		return broker.seDesabonner(mc);
 		
 	};
 	

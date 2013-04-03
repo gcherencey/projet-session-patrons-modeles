@@ -33,7 +33,7 @@ public class Broker
 	/**
 	 * HashSet contenant les adresses IP des differents client
 	 */
-	private Set<String> adressesIPClient = new HashSet<String>();
+	private Set<String> adressesIPClient;
 	
 	//CONSTRUCTEUR
 	
@@ -42,13 +42,14 @@ public class Broker
 	 */
 	public Broker()
 	{
+		
+		this.adressesIPClient = new HashSet<String>();
 		// On cree notre WSDL et notre interface
 		Endpoint.publish ("http://localhost:9998/broker", new BrokerImplementation(this));
 	}
 	
 	//METHODES
 	
-
 	/**
 	 * Permet d'abonner l'utilisateur en le rajoutant a la liste
 	 * @param messageContext precise dans quel "contexte" nous sommes (canal de communication)
@@ -61,7 +62,7 @@ public class Broker
 		InetSocketAddress remoteAddress = exchange.getRemoteAddress();
 		String remoteHost = remoteAddress.getHostName();
 		
-		return adressesIPClient.add(remoteHost);
+		return this.adressesIPClient.add(remoteHost);
 		
 	};
 	
@@ -77,7 +78,7 @@ public class Broker
 		InetSocketAddress remoteAddress = exchange.getRemoteAddress();
 		String remoteHost = remoteAddress.getHostName();
 		
-		return adressesIPClient.remove(remoteHost);
+		return this.adressesIPClient.remove(remoteHost);
 	};
 
 	/**
@@ -88,10 +89,10 @@ public class Broker
 	public boolean envoyerInformation (String info)
 	{
 		
-		System.out.println(adressesIPClient.toString());
+		System.out.println(this.adressesIPClient.toString());
 		
 		//Si aucun client ne s'est abonne
-		if (adressesIPClient.isEmpty())
+		if (this.adressesIPClient.isEmpty())
 		{		
 			System.out.println("En attente de clients");
 			return true;
@@ -102,7 +103,7 @@ public class Broker
 		{
 			
 			// on cree un Iterator pour parcourir notre HashSet
-			Iterator i = adressesIPClient.iterator(); 
+			Iterator i = this.adressesIPClient.iterator(); 
 			
 			// Pour chaque client present dans la liste on envoie l'information
 			while(i.hasNext()) 
