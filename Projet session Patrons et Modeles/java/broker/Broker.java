@@ -89,6 +89,9 @@ public class Broker
 	public boolean envoyerInformation (String info)
 	{
 		
+		//adresse du client a qui envoyer l'information
+		URL url = null;
+		
 		System.out.println(this.adressesIPClient.toString());
 		
 		//Si aucun client ne s'est abonne
@@ -108,9 +111,6 @@ public class Broker
 			// Pour chaque client present dans la liste on envoie l'information
 			while(i.hasNext()) 
 			{
-				
-				//adresse du client a qui envoyer l'information
-				URL url = null;
 				
 				try {
 					

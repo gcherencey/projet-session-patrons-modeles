@@ -1,20 +1,30 @@
 package aspects;
 
+import java.util.Iterator;
 import java.util.logging.Logger;
 
 
+
 public aspect LogAspect {
-	
-		Logger logger = Logger.getLogger("trace");
-	
-		pointcut loggCallEnvoi(): call(boolean broker.Broker.envoyerInformation(..));
-		pointcut loggCallsAbonne(): call(boolean broker.Broker.sAbonner(..));
-		pointcut loggCallseDesabonne(): call(boolean broker.Broker.seDesabonner(..));
 		
-	      after() returning (boolean reponse): loggCallEnvoi() {
+		FormatLog formatter = new FormatLog();
+		Logger logger =  formatter.creatLogger();
+	
+		pointcut loggCallEnvoi(String info): call(boolean broker.Broker.envoyerInformation(String))
+											 && args(info);
+		pointcut loggCallsAbonne(): call(boolean broker.Broker.sAbonner(..));
+		pointcut loggGetIP(): target(broker.Broker) && call(Object Iterator.next());
+		pointcut loggCallseDesabonne(): call(boolean broker.Broker.seDesabonner(..));
+	    
+		  after() returning (Object o): loggGetIP(){
+			  logger.info("Adresse destination ->" + o.toString());
+		  }
+		  
+	      after(String info) returning (boolean reponse): loggCallEnvoi(info) {
+	    	  
 	    	  
 	    	  if (reponse == true){
-	    		  logger.info("Message envoyee avec succes");
+	    		  logger.info("Message -> '"+ info +"' envoyee avec succes");
 	    	  }
 	    	  
 	    	  else{
@@ -42,6 +52,5 @@ public aspect LogAspect {
 	    	  else{
 	    		  logger.info("Erreur la de la suppression du client");
 	    	  }
-	      }
-	      
+	      } 
 }
