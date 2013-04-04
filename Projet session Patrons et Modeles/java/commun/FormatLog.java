@@ -1,4 +1,4 @@
-package aspects;
+package commun;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,7 +21,7 @@ public class FormatLog extends Formatter {
         return builder;
     }
     
-    public  Logger createLogger(){
+    public static Logger createLogger(){
 		
     	Logger logger = Logger.getLogger(FormatLog.class.getName());
     	logger.setUseParentHandlers(false);

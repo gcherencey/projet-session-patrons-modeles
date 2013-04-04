@@ -35,10 +35,14 @@ public class Broker
 	 */
 	private Set<String> adressesIPClient;
 	
-	//CONSTRUCTEUR
+	
+	
+	// CONSTRUCTEUR
+	
+	
 	
 	/**
-	 * Constructeur par defaut.
+	 * Constructeur par défaut.
 	 */
 	public Broker()
 	{
@@ -48,7 +52,11 @@ public class Broker
 		Endpoint.publish ("http://localhost:9998/broker", new BrokerImplementation(this));
 	}
 	
-	//METHODES
+	
+	
+	// METHODES
+	
+	
 	
 	/**
 	 * Permet d'abonner l'utilisateur en le rajoutant a la liste
@@ -66,6 +74,8 @@ public class Broker
 		
 	};
 	
+	
+	
 	/**
 	 * Permet de desabonner l'utilisateur en l'enlevant a la liste
 	 * @param messageContext precise dans quel "contexte" nous sommes (canal de communication)
@@ -81,6 +91,8 @@ public class Broker
 		return this.adressesIPClient.remove(remoteHost);
 	};
 
+	
+	
 	/**
 	 * Permet de transferer le message du fournisseur vers les clients abonnes 
 	 * @param info est la nouvelle information a transmettre
@@ -92,30 +104,25 @@ public class Broker
 		//adresse du client a qui envoyer l'information
 		URL url = null;
 		
-		System.out.println(this.adressesIPClient.toString());
-		
 		//Si aucun client ne s'est abonne
 		if (this.adressesIPClient.isEmpty())
-		{		
-			System.out.println("En attente de clients");
+		{
 			return true;
 		}
 		
 		//sinon
 		else
-		{
-			
-			// on cree un Iterator pour parcourir notre HashSet
-			Iterator i = this.adressesIPClient.iterator(); 
+		{		
+			// On cree un Iterator pour parcourir notre HashSet
+			Iterator<String> i = this.adressesIPClient.iterator (); 
 			
 			// Pour chaque client present dans la liste on envoie l'information
 			while(i.hasNext()) 
 			{
-				
-				try {
-					
-					//on cree l'url pour le client courant
-					url = new URL("http://"+ (String) i.next() + ":9999/client?wsdl");
+				try
+				{
+					// On cree l'url pour le client courant
+					url = new URL("http://"+ (String) i.next () + ":9999/client?wsdl");
 					
 					// On cree le qname
 					QName qname = new QName("http://client/", "ClientImplementationService");
@@ -123,25 +130,36 @@ public class Broker
 					// On cree le service
 					Service service = Service.create(url, qname);
 			    
-					//On cree une instance de l'interface client
+					// On cree une instance de l'interface client
 					ClientInterface client = service.getPort (ClientInterface.class);
 					
-					System.out.println(info);
-					
-					//On fait appel de la methode distante
+					// On fait appel de la methode distante
 					client.envoyerInformation(info);
-
-				} catch (MalformedURLException e) {
+				}
+				catch (MalformedURLException e)
+				{
 					
 					return false;
 				}	
-
 			}
 			
 			return true;
 		}
-
 	};
+	
+	
+	
+	/**
+	 * Permet de savoir s'il y a au moins un client de connecté.
+	 * 
+	 * @return true si au moins un client est connecté, false si aucun client n'est connecté
+	 */
+	public boolean auMoinsUnClient ()
+	{
+		return !this.adressesIPClient.isEmpty ();
+	}
+	
+	
 	
 	/**
 	 * Permet d'instancier un broker
@@ -149,8 +167,7 @@ public class Broker
 	 */
 	public static void main (String[] args)
 	{
-		// TODO Auto-generated method stub
-		Broker broker = new Broker();
+		new Broker();
 	}
 
 }
