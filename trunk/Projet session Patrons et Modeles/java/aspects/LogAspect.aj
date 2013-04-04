@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 public aspect LogAspect {
 		
 		FormatLog formatter = new FormatLog();
-		Logger logger =  formatter.creatLogger();
+		Logger logger =  formatter.createLogger();
 	
 		pointcut loggCallEnvoi(String info): call(boolean broker.Broker.envoyerInformation(String))
 											 && args(info);

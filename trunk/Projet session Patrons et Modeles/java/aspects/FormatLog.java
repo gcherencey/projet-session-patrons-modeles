@@ -21,9 +21,9 @@ public class FormatLog extends Formatter {
         return builder;
     }
     
-    public  Logger creatLogger(){
+    public  Logger createLogger(){
 		
-    	Logger logger = Logger.getLogger(LogCustomFormatter.class.getName());
+    	Logger logger = Logger.getLogger(FormatLog.class.getName());
     	logger.setUseParentHandlers(false);
 
         FormatLog formatter = new FormatLog();
