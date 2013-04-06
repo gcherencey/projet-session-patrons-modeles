@@ -10,9 +10,10 @@ import java.util.Observer;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.text.DefaultCaret;
 
 
 
@@ -35,8 +36,9 @@ public class ClientGraphique extends JFrame implements ActionListener,Observer
 	private Client client;
 	
 	private JButton boutonFermer;
-	private JPanel panelPrincipal, panelScrollPane;
+	private JPanel panelPrincipal;
 	private JScrollPane scrollPane;
+	private JTextArea textarea;
 	
 	
 	
@@ -64,11 +66,12 @@ public class ClientGraphique extends JFrame implements ActionListener,Observer
 		this.setContentPane (panelPrincipal);
 		panelPrincipal.setLayout (new BorderLayout ());
 		
-		panelScrollPane = new JPanel ();
-		panelScrollPane.setLayout (new BoxLayout (panelScrollPane, BoxLayout.PAGE_AXIS));
+		textarea = new JTextArea ();
+		DefaultCaret caret = (DefaultCaret) textarea.getCaret (); 
+		caret.setUpdatePolicy (DefaultCaret.ALWAYS_UPDATE);
 		
-		scrollPane = new JScrollPane (panelScrollPane);
-		scrollPane.setPreferredSize (new Dimension (400, 420));
+		scrollPane = new JScrollPane (textarea);
+		scrollPane.setPreferredSize (new Dimension (400, 400));
 		scrollPane.setHorizontalScrollBarPolicy (JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setVerticalScrollBarPolicy (JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
@@ -78,7 +81,7 @@ public class ClientGraphique extends JFrame implements ActionListener,Observer
 		boutonFermer.addActionListener (this);
 		panelPrincipal.add (boutonFermer, BorderLayout.CENTER);
 		
-		this.setSize (500, 500);
+		this.setSize (400, 475);
 		this.setLocationRelativeTo (null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible (true);
@@ -109,7 +112,7 @@ public class ClientGraphique extends JFrame implements ActionListener,Observer
 	public void update (Observable arg0, Object arg1)
 	{
 		// Dès que le client reçoit une nouvelle information, on l'affiche
-		this.panelScrollPane.add (new JLabel ((String) arg1));
+		this.textarea.append (((String) arg1 + "\n"));
 		this.validate ();
 	}
 }
