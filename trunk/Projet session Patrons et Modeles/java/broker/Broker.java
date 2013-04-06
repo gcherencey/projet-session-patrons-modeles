@@ -46,7 +46,6 @@ public class Broker
 	 */
 	public Broker()
 	{
-		
 		this.adressesIPClient = new HashSet<String>();
 		// On cree notre WSDL et notre interface
 		Endpoint.publish ("http://localhost:9998/broker", new BrokerImplementation(this));
