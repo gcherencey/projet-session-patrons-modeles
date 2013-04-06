@@ -2,13 +2,11 @@ package fournisseur;
 
 import interfaces.BrokerInterface;
 
-import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
-import javax.xml.ws.WebServiceException;
 
 
 /**
@@ -25,11 +23,12 @@ public class Fournisseur
 	/**
 	 * Permet de demarrer le fournisseur
 	 * @param args
+	 * @throws MalformedURLException 
+	 * @throws InterruptedException 
 	 */
 	public static void main (String[] args) throws MalformedURLException, InterruptedException
 	{
-		try
-		{
+
 			// On cree l'URL
 			URL url = new URL("http://localhost:9998/broker?wsdl");
 			
@@ -44,7 +43,6 @@ public class Fournisseur
 		    
 		    while(true)
 		    {
-	    	
 		    	//Toutes les secondes on envoie la nouvelle information au broker
 		    	for(int i=0; i<10; i++)
 		    	{
@@ -53,13 +51,4 @@ public class Fournisseur
 		    	}
 		    }
 		}
-		catch (MalformedURLException e)
-		{
-			System.err.println ("URL invalide");
-		}
-		catch (WebServiceException e)
-		{
-			System.err.println ("Plus de broker connecte");
-		}
-	}
 }
