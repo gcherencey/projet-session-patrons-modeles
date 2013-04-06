@@ -7,13 +7,17 @@ import broker.Broker;
 
 import commun.FormatLog;
 
-
+/**
+ * Aspect gerant le comportement des methodes selon leurs retours de la classe Broker
+ * @author CHERENCEY Gaylord
+ **/
 
 public aspect LogBrokerAspect
 {		
+		//Creation du logger
 		Logger logger =  FormatLog.createLogger ();
 		
-		
+		//POINTCUTS
 		
 		pointcut loggCallEnvoi (String info, Broker broker) : call (boolean Broker.envoyerInformation (String)) && args (info) && target (broker);
 		
@@ -24,22 +28,25 @@ public aspect LogBrokerAspect
 		pointcut loggCallseDesabonne () : call (boolean broker.Broker.seDesabonner (..));
 	    
 		
+		//ADVICES
 		
+		//Affichage de l'adresse IP destination apres appel de la methode Iterator.next () dans la classe Broker
 		after () returning (Object o) : loggGetIP ()
 		{
 			logger.info ("Adresse destination -> " + o.toString ());
 		}
 		
-		
-		
+		//Affichage de messages apres appel de la methode envoyerInformation dans la classe Broker
 		after (String info, Broker broker) returning (boolean reponse) : loggCallEnvoi (info, broker)
 		{
+			//Si il n'y a pas de client connecte, on affiche "Aucun client n'est connecte"
 			if (!broker.auMoinsUnClient ())
 			{
-				logger.info ("Aucun client n'est connecté.");
+				logger.info ("Aucun client n'est connecte.");
 			}
 			else
 			{
+				//Si le message a bien ete envoye on affiche le message en question
 				if (reponse == true)
 				{
 					logger.info ("Message -> '"+ info +"' envoyee avec succes");
@@ -51,8 +58,7 @@ public aspect LogBrokerAspect
 			}
 		}
 	    
-		
-		
+		//Affichage de messages apres appel de la methode sAbonner dans la classe Broker
 		after () returning (boolean reponse) : loggCallsAbonne ()
 		{
 			if (reponse)
@@ -65,8 +71,7 @@ public aspect LogBrokerAspect
 	    	}
 		}
 	      
-		
-		
+		//Affichage de messages selon comportement de la methode seDesabonner dans la classe Broker
 		after () returning (boolean reponse) : loggCallseDesabonne ()
 		{
 			if (reponse)
