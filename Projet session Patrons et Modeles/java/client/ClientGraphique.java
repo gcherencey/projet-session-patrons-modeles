@@ -117,7 +117,7 @@ public class ClientGraphique extends JFrame implements ActionListener,Observer
 		Information info = (Information) arg1;
 		
 		// Puis on l'affiche
-		this.textarea.append ("(" + info.getTypeToString () + ") " + info.getInformation ());
+		this.textarea.append ("(" + info.getTypeToString () + ") " + info.getInformation () + "\n");
 		this.validate ();
 	}
 }
