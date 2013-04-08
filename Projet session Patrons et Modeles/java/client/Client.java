@@ -11,6 +11,8 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.Service;
 
+import commun.Information;
+
 
 /**
  * 
@@ -36,7 +38,7 @@ public class Client extends Observable
 	/**
 	 * L'information envoyée par le broker.
 	 */
-	private String info;
+	private Information info;
 	
 	
 	
@@ -134,7 +136,7 @@ public class Client extends Observable
 	 * 
 	 * @param info L'information à afficher par la partie graphique.
 	 */
-	public void setInfo (String info)
+	public void setInfo (Information info)
 	{
 		this.info = info;
 		
@@ -149,7 +151,7 @@ public class Client extends Observable
 	 * 
 	 * @return La dernière information envoyée par le broker.
 	 */
-	public String getInfo ()
+	public Information getInfo ()
 	{
 		return this.info;
 	}
