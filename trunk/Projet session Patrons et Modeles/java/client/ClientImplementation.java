@@ -4,6 +4,8 @@ import interfaces.ClientInterface;
 
 import javax.jws.WebService;
 
+import commun.Information;
+
 
 
 /**
@@ -46,7 +48,7 @@ public class ClientImplementation implements ClientInterface
 	
 	
 	@Override
-	public boolean envoyerInformation (String info)
+	public boolean envoyerInformation (Information info)
 	{
 		// Met à jour l'information du client
 		client.setInfo (info);

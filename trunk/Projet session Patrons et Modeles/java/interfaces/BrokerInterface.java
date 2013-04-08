@@ -5,6 +5,8 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
 
+import commun.Information;
+
 
 
 /**
@@ -43,5 +45,5 @@ public interface BrokerInterface
 	 * 
 	 * @return true si le broker a bien reçu l'information, false sinon.
 	 */
-	@WebMethod boolean envoyerInformation (String info);
+	@WebMethod boolean envoyerInformation (Information info);
 }

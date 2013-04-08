@@ -7,13 +7,14 @@ import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.text.DefaultCaret;
+
+import commun.Information;
 
 
 
@@ -67,6 +68,7 @@ public class ClientGraphique extends JFrame implements ActionListener,Observer
 		panelPrincipal.setLayout (new BorderLayout ());
 		
 		textarea = new JTextArea ();
+		textarea.setEditable (false);
 		DefaultCaret caret = (DefaultCaret) textarea.getCaret (); 
 		caret.setUpdatePolicy (DefaultCaret.ALWAYS_UPDATE);
 		
@@ -111,8 +113,11 @@ public class ClientGraphique extends JFrame implements ActionListener,Observer
 	@Override
 	public void update (Observable arg0, Object arg1)
 	{
-		// Dès que le client reçoit une nouvelle information, on l'affiche
-		this.textarea.append (((String) arg1 + "\n"));
+		// Dès que le client reçoit une nouvelle information, on la récupère
+		Information info = (Information) arg1;
+		
+		// Puis on l'affiche
+		this.textarea.append ("(" + info.getTypeToString () + ") " + info.getInformation ());
 		this.validate ();
 	}
 }
