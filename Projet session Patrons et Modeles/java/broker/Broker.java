@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.jws.WebService;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.Service;
@@ -16,6 +17,7 @@ import javax.xml.ws.handler.MessageContext;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.xml.internal.ws.developer.JAXWSProperties;
+import commun.Information;
 
 
 /**
@@ -52,9 +54,7 @@ public class Broker
 	}
 	
 	
-	
 	// METHODES
-	
 	
 	
 	/**
@@ -97,7 +97,7 @@ public class Broker
 	 * @param info est la nouvelle information a transmettre
 	 * @return true si la suppression a ete realise avec succes
 	 */
-	public boolean envoyerInformation (String info)
+	public boolean envoyerInformation (Information info)
 	{
 		
 		//adresse du client a qui envoyer l'information

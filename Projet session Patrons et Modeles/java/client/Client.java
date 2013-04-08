@@ -145,7 +145,6 @@ public class Client extends Observable
 	}
 	
 	
-	
 	/**
 	 * Permet de récupérer la dernière information.
 	 * 

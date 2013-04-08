@@ -5,6 +5,8 @@ import javax.jws.WebService;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 
+import commun.Information;
+
 /* 
 * Implémente l'interface du broker.
 * 
@@ -66,8 +68,9 @@ public class BrokerImplementation implements interfaces.BrokerInterface
 	
 	
 	@Override
-	public boolean envoyerInformation (String info)
+	public boolean envoyerInformation (Information info)
 	{	    
 	    return broker.envoyerInformation (info);
-	};
+	}
+	
 }

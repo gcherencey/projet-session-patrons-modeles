@@ -46,9 +46,7 @@ public class Information implements Serializable
 		JARDINAGE = 9;
 	
 	
-	
 	// CONSTRUCTEURS
-	
 	
 	
 	/**
