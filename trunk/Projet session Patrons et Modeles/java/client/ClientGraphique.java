@@ -22,7 +22,7 @@ import commun.Information;
  * 
  * La fenêtre qui va afficher les informations.
  * 
- * @author Valentin Brémond
+ * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
  * 
  * @version 1.0
  *

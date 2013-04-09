@@ -10,7 +10,7 @@ import commun.Information;
 /* 
 * Implémente l'interface du broker.
 * 
-* @author Cherencey Gaylord
+ * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
 * 
 * @version 1.0
 *
@@ -71,6 +71,21 @@ public class BrokerImplementation implements interfaces.BrokerInterface
 	public boolean envoyerInformation (Information info)
 	{	    
 	    return broker.envoyerInformation (info);
+	}
+	
+	
+	
+	@Override
+	public boolean ajouterTypeInformation (String type)
+	{	
+		return broker.ajouterTypeInformation(type);
+	}
+	
+	
+	
+	@Override
+	public String[] recupererTypesInformation (){
+		return broker.recupererTypesInformation();
 	}
 	
 }

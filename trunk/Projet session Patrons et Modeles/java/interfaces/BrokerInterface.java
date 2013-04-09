@@ -13,7 +13,7 @@ import commun.Information;
  * 
  * Interface permettant à un client de se connecter ou à un fournisseur de fournir du contenu.
  * 
- * @author Valentin Brémond
+ * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
  * 
  * @version 1.0
  *
@@ -28,6 +28,8 @@ public interface BrokerInterface
 	 * @return true si le client est abonné, false sinon.
 	 */
 	@WebMethod boolean sAbonner ();
+	
+	
 	
 	/**
 	 * Permet à un client de se déabonner du broker.
@@ -46,4 +48,24 @@ public interface BrokerInterface
 	 * @return true si le broker a bien reçu l'information, false sinon.
 	 */
 	@WebMethod boolean envoyerInformation (Information info);
+	
+	
+	
+	/**
+	 * Permet a un fournisseur de fournir le type de l'information au broker.
+	 * 
+	 * @param type Type de l'information a� transmettre.
+	 * 
+	 * @return true si le broker a bien reçu le type, false sinon.
+	 */
+	@WebMethod boolean ajouterTypeInformation (String type);
+	
+	
+	
+	/**
+	 * Permet à un broker d'envoyer les types d'informations à un client.
+	 * 
+	 *@return la liste des differents types d'information.
+	 */
+	@WebMethod String[] recupererTypesInformation ();
 }

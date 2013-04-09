@@ -7,9 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
-import javax.jws.WebService;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.Service;
@@ -24,18 +22,23 @@ import commun.Information;
  * 
  * Broker qui va gerer la transmission des info entre fournisseur et client.
  * 
- * @author Cherencey Gaylord
+ * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
  * 
  * @version 1.0
  *
  */
 
+/**
+ * @author Utilisateur
+ *
+ */
 public class Broker
 {
 	/**
 	 * HashSet contenant les adresses IP des differents client
 	 */
-	private Set<String> adressesIPClient;
+	private HashSet<String> adressesIPClient;
+	private HashSet<String> typesInformation;
 	
 	
 	
@@ -49,12 +52,14 @@ public class Broker
 	public Broker()
 	{
 		this.adressesIPClient = new HashSet<String>();
+		this.typesInformation = new HashSet<String>();
 		// On cree notre WSDL et notre interface
 		Endpoint.publish ("http://localhost:9998/broker", new BrokerImplementation(this));
 	}
 	
 	
 	// METHODES
+	
 	
 	
 	/**
@@ -90,6 +95,17 @@ public class Broker
 		return this.adressesIPClient.remove(remoteHost);
 	};
 
+	
+	
+	/**
+	 * Permet d'ajouter un type d'information au broker (ex: cinema, sante ...)
+	 * @param type a ajouter dans le broker
+	 * @return true si l'ajout a ete realise, false sinon
+	 */
+	public boolean ajouterTypeInformation(String type) {
+		return this.typesInformation.add(type);
+	}
+	
 	
 	
 	/**
@@ -160,6 +176,20 @@ public class Broker
 	
 	
 	
+	/**
+	 * Permet d'envoyer la liste des types d'information aux clients connectes.
+	 * 
+	 * @return liste des types d'information
+	 */
+	
+	public String[] recupererTypesInformation() {
+		
+		//On retourne la liste dans une forme serialisable
+		return this.typesInformation.toArray(new String[this.typesInformation.size()]);
+	}
+	
+	
+		
 	/**
 	 * Permet d'instancier un broker
 	 * @param args

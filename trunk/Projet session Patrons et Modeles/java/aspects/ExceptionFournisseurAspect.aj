@@ -8,11 +8,11 @@ import fournisseur.Fournisseur;
 
 /**
  * Aspect gerant le comportement des exceptions de la classe Fournisseur
- * @author CHERENCEY Gaylord
+ * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
  *
  */
 
-public aspect LogFournisseurAspect {
+public aspect ExceptionFournisseurAspect {
 
 	//Creation du logger
 	Logger logger =  FormatLog.createLogger ();

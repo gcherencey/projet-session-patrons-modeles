@@ -12,7 +12,7 @@ import commun.Information;
  * 
  * Implémente l'interface du client.
  * 
- * @author Valentin Brémond
+  * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
  * 
  * @version 1.0
  *
@@ -55,4 +55,5 @@ public class ClientImplementation implements ClientInterface
 		
 		return true;
 	}
+	
 }

@@ -6,10 +6,11 @@ import java.util.logging.Logger;
 import broker.Broker;
 
 import commun.FormatLog;
+import commun.Information;
 
 /**
  * Aspect gerant le comportement des methodes selon leurs retours de la classe Broker
- * @author CHERENCEY Gaylord
+ * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
  **/
 
 public aspect LogBrokerAspect
@@ -19,7 +20,7 @@ public aspect LogBrokerAspect
 		
 		//POINTCUTS
 		
-		pointcut loggCallEnvoi (String info, Broker broker) : call (boolean Broker.envoyerInformation (String)) && args (info) && target (broker);
+		pointcut loggCallEnvoi (Information info, Broker broker) : call (boolean Broker.envoyerInformation (Information)) && args (info) && target (broker);
 		
 		pointcut loggCallsAbonne (): call (boolean Broker.sAbonner (..));
 		
@@ -37,7 +38,7 @@ public aspect LogBrokerAspect
 		}
 		
 		//Affichage de messages apres appel de la methode envoyerInformation dans la classe Broker
-		after (String info, Broker broker) returning (boolean reponse) : loggCallEnvoi (info, broker)
+		after (Information info, Broker broker) returning (boolean reponse) : loggCallEnvoi (info, broker)
 		{
 			//Si il n'y a pas de client connecte, on affiche "Aucun client n'est connecte"
 			if (!broker.auMoinsUnClient ())
@@ -49,7 +50,7 @@ public aspect LogBrokerAspect
 				//Si le message a bien ete envoye on affiche le message en question
 				if (reponse == true)
 				{
-					logger.info ("Message -> '"+ info +"' envoyee avec succes");
+					logger.info ("Message ->  [" + info.getTypeToString() + "] "+ info.getInformation() + " envoyee avec succes");
 				}
 				else
 				{
