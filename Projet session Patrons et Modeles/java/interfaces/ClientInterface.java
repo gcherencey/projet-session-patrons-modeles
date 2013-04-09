@@ -13,7 +13,7 @@ import commun.Information;
  * 
  * Interface permettant au broker de mettre à jour un client.
  * 
- * @author Valentin Brémond
+ * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
  * 
  * @version 1.0
  *
@@ -30,4 +30,5 @@ public interface ClientInterface
 	 * @return true si le client a bien reçu l'information, false sinon.
 	 */
 	@WebMethod boolean envoyerInformation (Information info);
+	
 }

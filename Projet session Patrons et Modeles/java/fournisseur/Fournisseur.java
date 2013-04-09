@@ -15,7 +15,7 @@ import commun.Information;
  * 
  * Le fournisseur qui va envoyer les informations.
  * 
- * @author Cherencey Gaylord, Florian Massacret, Valentin Brémond
+ * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
  * 
  * @version 2.0
  *
@@ -32,7 +32,7 @@ public class Fournisseur
 	public static void main (String[] args) throws MalformedURLException, InterruptedException
 	{
 		// L'information qui sera transmise
-		Information info;
+		Information info = new Information();
 	
 		// On crée l'URL
 		URL url = new URL ("http://localhost:9998/broker?wsdl");
@@ -46,13 +46,21 @@ public class Fournisseur
 	    //On crée une instance de l'interface broker
 	    BrokerInterface broker = service.getPort (BrokerInterface.class); 
 	    
+	    //On envoie dans un premier temps tout les types qui seront envoyes par la suite au broker
+	    for (int i=0; i<10; i++)
+	    {
+	    	info.setType(i);
+	    	broker.ajouterTypeInformation(info.getTypeToString());
+	    }
+	    
 	    // On envoie des informations en boucle
 	    while (true)
 	    {
 	    	// Toutes les secondes on envoie la nouvelle information au broker
 	    	for(int i=0; i<10; i++)
-	    	{
-	    		info = new Information ((int) (Math.random () * 10), "Information : " + i);
+	    	{	    		
+	    		info.setType((int) (Math.random () * 10));
+	    		info.setInformation("Information : " + i);
 	    		
 	    		broker.envoyerInformation (info);
 	    		

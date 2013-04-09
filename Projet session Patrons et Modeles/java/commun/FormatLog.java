@@ -8,6 +8,12 @@ import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+/**
+ * Classe definissant le format des messages logs
+ * 
+ * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
+ *
+ */
 public class FormatLog extends Formatter
 {
     private static final DateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss.SSS");

@@ -18,7 +18,7 @@ import commun.Information;
  * 
  * Le client qui va s'abonner au broker.
  * 
- * @author Valentin Brémond
+ * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
  * 
  * @version 1.0
  *
@@ -38,8 +38,12 @@ public class Client extends Observable
 	/**
 	 * L'information envoyée par le broker.
 	 */
-	private Information info;
+	private Information info;	
 	
+	/**
+	 * Liste des types d'information present sur le broker.
+	 */
+	private String[] typesInformation;
 	
 	
 	// CONSTRUCTEURS
@@ -74,6 +78,17 @@ public class Client extends Observable
 			// Si on ne peut pas s'abonner, on affiche une erreur
 			JOptionPane.showMessageDialog (null, "Impossible de s'abonner au contenu.", "Erreur de contenu", JOptionPane.ERROR_MESSAGE);
 			System.exit (0);
+		}
+		
+		//On recupere les types d'informations disponibles
+		if(interfaceBroker.recupererTypesInformation().length != 0 ){
+			
+			typesInformation = interfaceBroker.recupererTypesInformation();			
+		}
+	
+		for (int i = 0; i < typesInformation.length; i++)
+		{
+			System.out.println(typesInformation[i]);
 		}
 		
 		// Puis on lance la fenêtre graphique
