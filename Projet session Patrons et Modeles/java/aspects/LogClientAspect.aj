@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import client.Client;
 
 import commun.FormatLog;
+import commun.Information;
 
 
 
@@ -100,9 +101,9 @@ public aspect LogClientAspect
 	 * 
 	 * @param info L'information qui doit être affichée.
 	 */
-	before (String info) : call (void Client.setInfo (String)) && args (info)
+	before (Information info) : call (void Client.setInfo (Information)) && args (info)
 	{
-		log.info ("Information reçue : '" + info + "'");
+		log.info ("Information reçue : '[" + info.getTypeToString() + "] " + info.getInformation() + "'");
 	}
 	
 	
