@@ -32,6 +32,15 @@ public interface BrokerInterface
 	
 	
 	/**
+	 * Permet a un client de souscrire a des services.
+	 * 
+	 * @return true si les souscriptions se sont bien effectuees, false sinon.
+	 */
+	@WebMethod boolean souscrireAdesServices (String[] listeServiceAsouscrire);
+	
+	
+	
+	/**
 	 * Permet à un client de se déabonner du broker.
 	 * 
 	 * @return true si le client est désabonné, false sinon.

@@ -65,7 +65,13 @@ public class BrokerImplementation implements interfaces.BrokerInterface
 		return broker.seDesabonner (mc);	
 	};
 	
-	
+	@Override
+	public boolean souscrireAdesServices (String[] listeServiceAsouscrire)
+	{
+		MessageContext mc = ws.getMessageContext ();
+		return broker.souscrireAdesServices (mc, listeServiceAsouscrire);
+	};
+		
 	
 	@Override
 	public boolean envoyerInformation (Information info)
