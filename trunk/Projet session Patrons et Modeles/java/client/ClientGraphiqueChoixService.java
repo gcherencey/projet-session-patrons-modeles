@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 
 /**
 * 
-* La fenêtre qui va afficher les informations.
+* La fenêtre qui va afficher les choix de services disponible.
 * 
 * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
 * 

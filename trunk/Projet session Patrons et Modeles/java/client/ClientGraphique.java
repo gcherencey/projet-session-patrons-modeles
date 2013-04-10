@@ -20,7 +20,7 @@ import commun.Information;
 
 /**
  * 
- * La fenêtre qui va afficher les informations.
+ * La fenêtre qui va afficher les informations liees au services choisis.
  * 
  * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
  * 
