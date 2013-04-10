@@ -4,6 +4,7 @@ import interfaces.BrokerInterface;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.Observable;
 
 import javax.swing.JOptionPane;
@@ -43,7 +44,12 @@ public class Client extends Observable
 	/**
 	 * Liste des types d'information present sur le broker.
 	 */
-	private String[] typesInformation;
+	private String[] listeTypesInformation;
+	
+	/**
+	 * Liste des services auxquels le client veut souscrire.
+	 */
+	private HashSet<String> listeServiceAsouscrire = new HashSet<String>();
 	
 	
 	// CONSTRUCTEURS
@@ -63,7 +69,7 @@ public class Client extends Observable
 		// On tente de s'y connecter
 		try
 		{
-			this.interfaceBroker = connexionBroker (urlBroker);
+			this.setInterfaceBroker(connexionBroker (urlBroker));
 		}
 		catch (MalformedURLException e)
 		{
@@ -73,7 +79,7 @@ public class Client extends Observable
 		}
 		
 		// On s'abonne au broker
-		if (!interfaceBroker.sAbonner ())
+		if (!this.getInterfaceBroker().sAbonner ())
 		{
 			// Si on ne peut pas s'abonner, on affiche une erreur
 			JOptionPane.showMessageDialog (null, "Impossible de s'abonner au contenu.", "Erreur de contenu", JOptionPane.ERROR_MESSAGE);
@@ -81,24 +87,22 @@ public class Client extends Observable
 		}
 		
 		//On recupere les types d'informations disponibles
-		if(interfaceBroker.recupererTypesInformation().length != 0 ){
-			
-			typesInformation = interfaceBroker.recupererTypesInformation();			
-		}
-	
-		for (int i = 0; i < typesInformation.length; i++)
-		{
-			System.out.println(typesInformation[i]);
+		if(this.getInterfaceBroker().recupererTypesInformation().length == 0 ){
+			// Si on ne peut pas s'abonner, on affiche une erreur
+			JOptionPane.showMessageDialog (null, "Pas de service disponible pour le moment.", "Erreur de fournisseur", JOptionPane.ERROR_MESSAGE);
+			System.exit (0);
 		}
 		
-		// Puis on lance la fenêtre graphique
-		new ClientGraphique (this);
+		//On recupere la liste des types de services proposes par les fournisseurs
+		this.setListeTypesInformation(this.getInterfaceBroker().recupererTypesInformation());	
+		
+		//On demarre la fenetre permettant les choix de services
+		new ClientGraphiqueChoixService(this);
+		
 	}
 	
 	
-	
 	// MÉTHODES
-	
 	
 	
 	/**
@@ -138,12 +142,14 @@ public class Client extends Observable
 		deleteObserver (clientGraphique);
 		
 		// On se désabonne du broker
-		interfaceBroker.seDesabonner ();
+		getInterfaceBroker().seDesabonner ();
 		
 		// Puis on quitte
 		System.exit (0);
 	}
 	
+	
+	//GETTER & SETTER
 	
 	
 	/**
@@ -169,6 +175,56 @@ public class Client extends Observable
 	public Information getInfo ()
 	{
 		return this.info;
+	}
+	
+	
+	
+	/**
+	 * Permet de recuperer l'instance de brokerInterface
+	 * @return the interfaceBroker
+	 */
+	public BrokerInterface getInterfaceBroker() {
+		return interfaceBroker;
+	}
+
+
+	
+	/**
+	 * Permet de changer l'instance de brokerInterface
+	 * @param interfaceBroker the interfaceBroker to set
+	 */
+	public void setInterfaceBroker(BrokerInterface interfaceBroker) {
+		this.interfaceBroker = interfaceBroker;
+	}
+	
+	
+	
+	/**
+	 * Permet de recuperer la liste des services auxquels le client veut souscrire
+	 * @return the listeServiceAsouscrire
+	 */
+	public HashSet<String> getListeServiceAsouscrire() {
+		return this.listeServiceAsouscrire;
+	}
+	
+	
+
+	/**
+	 * Permet de recuperer la liste des types de service disponible
+	 * @return the listeServiceAsouscrire
+	 */
+	public String [] getListeTypesInformation() {
+		return this.listeTypesInformation;
+	}	
+	
+	
+	
+	/**
+	 * Permet de changer la liste des types de service disponible
+	 * @param typesInformation the typesInformation to set
+	 */
+	public void setListeTypesInformation(String[] typesInformation) {
+		this.listeTypesInformation = typesInformation;
 	}
 	
 	
