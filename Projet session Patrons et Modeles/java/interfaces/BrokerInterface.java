@@ -13,7 +13,7 @@ import commun.Information;
  * 
  * Interface permettant à un client de se connecter ou à un fournisseur de fournir du contenu.
  * 
- * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
+ * @author Valentin Brémond, Florian Massacret, Gaylord Cherencey
  * 
  * @version 1.0
  *
@@ -23,20 +23,33 @@ import commun.Information;
 public interface BrokerInterface
 {
 	/**
-	 * Permet à un client de s'abonner au broker.
+	 * Permet à un fournisseur de dire au broker le type d'information qu'il peut fournir.
 	 * 
-	 * @return true si le client est abonné, false sinon.
+	 * @param type Le type de l'information à transmettre.
+	 * 
+	 * @return true si le broker a bien reçu le type, false sinon.
 	 */
-	@WebMethod boolean sAbonner ();
+	@WebMethod boolean ajouterTypeInformation (String type);
 	
 	
 	
 	/**
-	 * Permet a un client de souscrire a des services.
+	 * Permet à un client de récupérer les types d'informations disponibles sur le broker.
 	 * 
-	 * @return true si les souscriptions se sont bien effectuees, false sinon.
+	 * @return La liste des différents types d'informations.
 	 */
-	@WebMethod boolean souscrireAdesServices (String[] listeServiceAsouscrire);
+	@WebMethod String[] recupererTypesInformations ();
+	
+
+	
+	/**
+	 * Permet à un client de s'abonner au broker.
+	 * 
+	 * @param listeTypesInformations Une liste des types d'information auxquels le client veut souscrire.
+	 * 
+	 * @return true si le client est abonné, false sinon.
+	 */
+	@WebMethod boolean sAbonner (String[] listeTypesInformations);
 	
 	
 	
@@ -57,24 +70,4 @@ public interface BrokerInterface
 	 * @return true si le broker a bien reçu l'information, false sinon.
 	 */
 	@WebMethod boolean envoyerInformation (Information info);
-	
-	
-	
-	/**
-	 * Permet a un fournisseur de fournir le type de l'information au broker.
-	 * 
-	 * @param type Type de l'information a� transmettre.
-	 * 
-	 * @return true si le broker a bien reçu le type, false sinon.
-	 */
-	@WebMethod boolean ajouterTypeInformation (String type);
-	
-	
-	
-	/**
-	 * Permet à un broker d'envoyer les types d'informations à un client.
-	 * 
-	 *@return la liste des differents types d'information.
-	 */
-	@WebMethod String[] recupererTypesInformation ();
 }

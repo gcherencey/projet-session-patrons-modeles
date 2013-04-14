@@ -12,8 +12,8 @@ import fournisseur.Fournisseur;
  *
  */
 
-public aspect ExceptionFournisseurAspect {
-
+public aspect ExceptionFournisseurAspect
+{
 	//Creation du logger
 	Logger logger =  FormatLog.createLogger ();
 	

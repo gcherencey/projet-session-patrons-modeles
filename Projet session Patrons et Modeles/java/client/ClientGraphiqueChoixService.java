@@ -3,30 +3,28 @@ package client;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map.Entry;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-/**
-* 
-* La fenêtre qui va afficher les choix de services disponible.
-* 
-* @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
-* 
-* @version 1.0
-*
-*/
-	
-public class ClientGraphiqueChoixService extends JFrame implements ActionListener, ItemListener
-{
 
+
+/**
+ * 
+ * La fenêtre qui va afficher les choix de services disponible.
+ * 
+ * @author Gaylord Cherencey, Florian Massacret, Valentin Brémond
+ * 
+ * @version 1.0
+ *
+*/
+public class ClientGraphiqueChoixService extends Graphique implements ActionListener
+{
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -34,15 +32,26 @@ public class ClientGraphiqueChoixService extends JFrame implements ActionListene
 	 */
 	private Client client;
 	
+	/**
+	 * Stocke la liste des types d'information.
+	 */
+	private HashSet<String> listeTypesInformations;
+	
+	/**
+	 * Permet de savoir si l'utilisateur a coché au moins une case.
+	 */
+	boolean auMoinsUne = false;
+	
+	/**
+	 * La liste des CheckBox qui vont contenir les types d'informations.
+	 */
+	private JCheckBox[] checkBoxs;
+	
 	private JButton boutonValider;
 	
 	private JPanel panelPrincipal;
 	private JPanel panelChoix;
-
-	private HashSet <JCheckBox> listeCheckBox = new HashSet<JCheckBox>();
-	private HashMap <String, Boolean> statutCheckBox = new HashMap<String, Boolean>();
 	
-	private JCheckBox checkBox;
 	
 	
 	// CONSTRUCTEURS
@@ -53,32 +62,37 @@ public class ClientGraphiqueChoixService extends JFrame implements ActionListene
 	 * Constructeur par valeurs.
 	 * 
 	 * @param client Le Client lié à cette instance.
+	 * @param listeTypesInformations La liste des types d'information disponibles.
 	 */
-	public ClientGraphiqueChoixService (Client client)
+	public ClientGraphiqueChoixService (Client client, HashSet<String> listeTypesInformations)
 	{
 		this.client = client;
+		this.listeTypesInformations = listeTypesInformations;
 		
 		// On construit la fenêtre
 		this.setTitle ("Choix des services");
 		
 		panelPrincipal = new JPanel ();
-		panelChoix = new JPanel();
+		panelChoix = new JPanel ();
+		panelChoix.setLayout(new BoxLayout(panelChoix, BoxLayout.PAGE_AXIS));
 		
 		this.add (panelPrincipal);
 		this.setContentPane (panelPrincipal);
 		
-		//Pour chaque service disponible (element)
-		for (String element : this.client.getListeTypesInformation())
-		{	
-			//On cree et ajoute une checkBox avec le nom du service dans la fenetre
-			checkBox = new JCheckBox(element);
-			checkBox.addItemListener(this);
-			panelChoix.add(checkBox);
+		// On créé un tableau de checkboxs de taille identique au nombre de types d'informations disponibles
+		checkBoxs = new JCheckBox [this.listeTypesInformations.size ()];
+		// Permet de se promener dans ce tableau de checkboxs
+		int i = 0;
+		
+		// Pour chaque type disponible
+		for (String type : this.listeTypesInformations)
+		{
+			// On crée et ajoute une CheckBox avec le nom du service dans la fenêtre
+			checkBoxs[i] = new JCheckBox (type);
 			
-			//On ajoute aussi cette entree dans le HasMap avec comme valeur de base false (soit non-cochee)
-			statutCheckBox.put(element, false);
+			panelChoix.add (checkBoxs[i]);
 			
-		    listeCheckBox.add(checkBox);
+		    ++i;
 		}
 		
 		panelPrincipal.setLayout (new BorderLayout ());
@@ -89,7 +103,7 @@ public class ClientGraphiqueChoixService extends JFrame implements ActionListene
 		boutonValider.addActionListener (this);
 		panelPrincipal.add (boutonValider, BorderLayout.SOUTH);
 		
-		this.setSize (400, 475);
+		this.setSize (250, 400);
 		this.setLocationRelativeTo (null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible (true);
@@ -100,50 +114,50 @@ public class ClientGraphiqueChoixService extends JFrame implements ActionListene
 	// MÉTHODES
 	
 	
-		@Override
+	
+	@Override
 	public void actionPerformed (ActionEvent arg0)
 	{
-		
+		// On récupère la source
 		Object evenement = arg0.getSource ();
 		
 		//Si l'utilisateur valide ses choix
 		if (evenement == boutonValider)
-		{
-			//Pour chaque entree dans le HashMap stutCheckBox
-			for(Entry<String, Boolean> entry : statutCheckBox.entrySet()) 
+		{	
+			// On prépare la liste finale des types choisis par l'utilisateur
+			HashSet<String> listeTypesChoisis = new HashSet<String> ();
+			
+			for (JCheckBox checkbox : checkBoxs)
 			{
-				//On verifie si la case est cochee 
-				if (entry.getValue() == true)
+				if (checkbox.isSelected ())
 				{
-					//On rajoute ce service dans la liste des services choisis par le client
-					this.client.getListeServiceAsouscrire().add(entry.getKey());
+					this.auMoinsUne = true;
+					listeTypesChoisis.add (checkbox.getText ());
 				}
-				
 			}
 			
-			//On fait appel a la methode souscrireAdesServices pour preciser quels services on choisi au broker (on transforme l'ArrayList des services souscris en String[] (objet serialisable) )
-			this.client.getInterfaceBroker().souscrireAdesServices(this.client.getListeServiceAsouscrire().toArray(new String[this.client.getListeServiceAsouscrire().size()]));
-			
-			// Si l'utilisateur veut fermer la fenêtre
-			this.dispose ();
-			
-			
-			//On lance la fenetre qui va afficher l'actualisation des informations envoyees par les fournisseurs
-			new ClientGraphique (this.client);
+			// Si l'utilisateur a coché au moins une case, on peut continuer normalement
+			if (auMoinsUne)
+			{
+				// On envoie cette liste au Client pour appeler la prochaine fenêtre
+				this.client.choisirTypesInformations (listeTypesChoisis);
+				
+				// Puis on ferme la fenêtre
+				fermerFenetre ();
+			}
+			else
+			{
+				// Sinon on lui affiche un message
+				JOptionPane.showMessageDialog (null, "Veuillez cocher au moins une case", "Information", JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
-		
 	}
 
-		
-		
+
+
 	@Override
-	public void itemStateChanged(ItemEvent arg0) {
-		
-		Object evenement = arg0.getSource ();
-		
-		//Si le statut des checkbox change on le modifie aussi dans le Hashmap
-		statutCheckBox.put(((JCheckBox)evenement).getText(), ((JCheckBox)evenement).isSelected());
-
-	}
-		
+	protected void fermerFenetre ()
+	{
+		this.dispose ();
+	}	
 }

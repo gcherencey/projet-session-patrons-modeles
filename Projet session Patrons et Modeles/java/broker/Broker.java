@@ -39,9 +39,13 @@ import commun.Information;
 public class Broker
 {
 	/**
-	 * HashSet contenant les adresses IP des differents client
+	 * HashSet contenant les adresses IP des differents client.
 	 */
 	private HashMap<String, HashSet<String>> adressesIPClient;
+	
+	/**
+	 * Permet de stocker les types d'informations auxquels un client souscrit.
+	 */
 	private HashSet<String> typesInformation;
 	
 	
@@ -55,10 +59,11 @@ public class Broker
 	 */
 	public Broker()
 	{
-		this.adressesIPClient = new HashMap<String, HashSet<String>>();
-		this.typesInformation = new HashSet<String>();
+		this.adressesIPClient = new HashMap<String, HashSet<String>> ();
+		this.typesInformation = new HashSet<String> ();
+		
 		// On cree notre WSDL et notre interface
-		Endpoint.publish ("http://localhost:9998/broker", new BrokerImplementation(this));
+		Endpoint.publish ("http://localhost:9998/broker", new BrokerImplementation (this));
 	}
 	
 	
@@ -67,61 +72,30 @@ public class Broker
 	
 	
 	/**
-	 * Permet d'abonner l'utilisateur en le rajoutant a la liste
-	 * @param messageContext precise dans quel "contexte" nous sommes (canal de communication)
-	 * @return true si l'ajout a ete realise avec succes
+	 * Permet d'abonner un utilisateur.
+	 * 
+	 * @param messageContext Précise dans quel "contexte" nous sommes (canal de communication).
+	 * @param listeTypesInformations Le type d'informations auxquels le client veut souscrire.
+	 * 
+	 * @return true si l'ajout a été réalisé avec succes, false sinon.
 	 */
-	public boolean sAbonner (MessageContext messageContext)
+	public boolean sAbonner (MessageContext messageContext, HashSet<String> listeTypesInformations)
 	{
 		//On recupere l'adresse IP du client qui veut s'abonner
-		HttpExchange exchange = (HttpExchange) messageContext.get(JAXWSProperties.HTTP_EXCHANGE);
-		InetSocketAddress remoteAddress = exchange.getRemoteAddress();
-		String remoteHost = remoteAddress.getHostName();
+		HttpExchange exchange = (HttpExchange) messageContext.get (JAXWSProperties.HTTP_EXCHANGE);
+		InetSocketAddress remoteAddress = exchange.getRemoteAddress ();
+		String remoteHost = remoteAddress.getHostName ();
 		
-		if (!this.adressesIPClient.containsKey(remoteAddress))
+		// Si l'utilisateur n'existe pas déjà dans la liste, on le rajoute
+		if (!this.adressesIPClient.containsKey (remoteAddress))
 		{
-			this.adressesIPClient.put(remoteHost, new HashSet<String>());
+			this.adressesIPClient.put (remoteHost, listeTypesInformations);
 			return true;			
 		}
-		
 		else
 		{
 			return false;
 		}
-		
-	};
-	
-	
-	
-	/**
-	 * @param mc precise dans quel "contexte" nous sommes (canal de communication) afin de mapper les services avec un client particulier
-	 * @param listeServiceAsouscrire contient tout les services auxquels le client veux souscrire 
-	 * @return true si la souscription a ete realisee avec succes
-	 */
-	public boolean souscrireAdesServices(MessageContext mc, String[] listeServiceAsouscrire) 
-	{
-		//On recupere l'adresse IP du client qui veut se desabonner
-		HttpExchange exchange = (HttpExchange) mc.get(JAXWSProperties.HTTP_EXCHANGE);
-		InetSocketAddress remoteAddress = exchange.getRemoteAddress();
-		String remoteHost = remoteAddress.getHostName();
-		
-		HashSet<String> listeAjoutServiceAuClient = new HashSet<String>();
-		
-		if (this.adressesIPClient.containsKey(remoteHost)){
-			
-			for (String service : listeServiceAsouscrire)
-			{
-				listeAjoutServiceAuClient.add(service);
-			}
-			
-			this.adressesIPClient.put(remoteHost, listeAjoutServiceAuClient);
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-		
 	}
 	
 	
@@ -134,99 +108,101 @@ public class Broker
 	public boolean seDesabonner (MessageContext mc)
 	{
 		//On recupere l'adresse IP du client qui veut se desabonner
-		HttpExchange exchange = (HttpExchange) mc.get(JAXWSProperties.HTTP_EXCHANGE);
-		InetSocketAddress remoteAddress = exchange.getRemoteAddress();
-		String remoteHost = remoteAddress.getHostName();
+		HttpExchange exchange = (HttpExchange) mc.get (JAXWSProperties.HTTP_EXCHANGE);
+		InetSocketAddress remoteAddress = exchange.getRemoteAddress ();
+		String remoteHost = remoteAddress.getHostName ();
 		
-		if(this.adressesIPClient.containsKey(remoteHost))
+		if(this.adressesIPClient.containsKey (remoteHost))
 		{
-			this.adressesIPClient.remove(remoteHost);
+			this.adressesIPClient.remove (remoteHost);
 			return true;
 		}
-		
 		else
 		{
 			return false;
 		}
-	};
+	}
 
 	
 	
 	/**
-	 * Permet d'ajouter un type d'information au broker (ex: cinema, sante ...)
-	 * @param type a ajouter dans le broker
-	 * @return true si l'ajout a ete realise, false sinon
+	 * Permet d'ajouter un type d'information au broker (ex: cinema, sante ...).
+	 * 
+	 * @param type Le type à ajouter dans le broker.
+	 * 
+	 * @return true si l'ajout a été réalisé, false sinon.
 	 */
-	public boolean ajouterTypeInformation(String type) {
-		return this.typesInformation.add(type);
+	public boolean ajouterTypeInformation (String type)
+	{
+		return this.typesInformation.add (type);
 	}
 	
 	
 	
 	/**
-	 * Permet de transferer le message du fournisseur vers les clients abonnes 
-	 * @param info est la nouvelle information a transmettre
-	 * @return true si la suppression a ete realise avec succes
+	 * Permet de transférer le message du fournisseur vers les clients abonnés.
+	 *  
+	 * @param info L'information à transmettre.
+	 * 
+	 * @return true si la suppression a été réalisée avec succès, false sinon.
 	 */
 	public boolean envoyerInformation (Information info)
 	{
-		
-		//adresse du client a qui envoyer l'information
+		// Adresse du client à qui envoyer l'information
 		URL url = null;
 		
-		//Si aucun client ne s'est abonne
+		// Si aucun client ne s'est abonné
 		if (this.adressesIPClient.isEmpty())
 		{
 			return true;
 		}
-		
-		//sinon
 		else
-		{		
-			
-			// Pour chaque client present dans la liste on envoie l'information selon ses souscriptions
-			for (String adresseClient : this.adressesIPClient.keySet()) 
+		{
+			// Pour chaque client présent dans la liste, on envoie l'information selon ses souscriptions
+			for (String adresseClient : this.adressesIPClient.keySet ()) 
 			{
-				System.out.println(adresseClient);
 				try
 				{
+					// On crée l'URL pour le client courant
+					url = new URL ("http://"+ adresseClient + ":9999/client?wsdl");
 					
-					// On cree l'url pour le client courant
-					url = new URL("http://"+ adresseClient + ":9999/client?wsdl");
+					// On crée le qname
+					QName qname = new QName ("http://client/", "ClientImplementationService");
 					
-					// On cree le qname
-					QName qname = new QName("http://client/", "ClientImplementationService");
-					
-					// On cree le service
-					Service service = Service.create(url, qname);
+					// On crée le service
+					Service service = Service.create (url, qname);
 			    
-					// On cree une instance de l'interface client
+					// On crée une instance de l'interface client
 					ClientInterface client = service.getPort (ClientInterface.class);
 					
-					//Si le client a souscrit a ce service
-					if (this.adressesIPClient.get(adresseClient).contains(info.getTypeToString()) && !this.adressesIPClient.get(adresseClient).isEmpty())
-					{				
-						// On fait appel de la methode distante
-						client.envoyerInformation(info);
+					// Si le client a souscrit à au moins un type d'information
+					if (!this.adressesIPClient.get(adresseClient).isEmpty())
+					{
+						//System.out.println ("");
+						// Si le client a souscrit à ce type d'information, on lui envoie
+						if (this.adressesIPClient.get (adresseClient).contains (info.getTypeToString ()))
+						{				
+							// On fait appel à la methode distante
+							client.envoyerInformation(info);
+						}						
 					}
-					
 				}
 				catch (MalformedURLException e)
 				{
-					
 					return false;
 				}	
 			}
 			
 			return true;
 		}
-	};
+	}
 	
 	
 	
 	/**
 	 * Permet de savoir s'il y a au moins un client de connecté.
-	 * @return true si au moins un client est connecté, false si aucun client n'est connecté
+	 * 
+	 * @return true si au moins un client est connecté, false si aucun client n'est connecté.
 	 */
 	public boolean auMoinsUnClient ()
 	{
@@ -236,25 +212,22 @@ public class Broker
 	
 	
 	/**
-	 * Permet d'envoyer la liste des types d'information aux clients connectes.
-	 * @return liste des types d'information
+	 * Permet d'envoyer la liste des types d'information aux clients connectés.
+	 * 
+	 * @return La liste des types d'information.
 	 */
-	
-	public String[] recupererTypesInformation() {
-		
-		//On retourne la liste dans une forme serialisable
-		return this.typesInformation.toArray(new String[this.typesInformation.size()]);
+	public HashSet<String> recupererTypesInformations ()
+	{
+		return this.typesInformation;
 	}
 	
 	
 		
 	/**
-	 * Permet d'instancier un broker
-	 * @param args
+	 * Permet d'instancier un broker.
 	 */
 	public static void main (String[] args)
 	{
 		new Broker();
 	}
-
 }

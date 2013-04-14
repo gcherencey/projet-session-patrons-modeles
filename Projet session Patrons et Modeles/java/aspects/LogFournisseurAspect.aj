@@ -11,26 +11,26 @@ import commun.FormatLog;
  * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
  **/
 
-public aspect LogFournisseurAspect {
-
+public aspect LogFournisseurAspect
+{
 	//Creation du logger
 	Logger logger =  FormatLog.createLogger ();
 		
 	//POINTCUT
 	
-	pointcut loggCallEnvoiType (String type) : call (boolean Broker.ajouterTypeInformation(String)) && args(type);
+	pointcut loggCallEnvoiType (String type) : call (boolean Broker.ajouterTypeInformation (String)) && args(type);
 	
 	//ADVICES
 	
 	after (String type) returning (boolean reponse) : loggCallEnvoiType (type)
 	{
-		if(reponse){
+		if(reponse)
+		{
 			logger.info ("Envoi du type -> " + type);
 		}
 		else
 		{
-			logger.info("Erreur lors de l'envoi du type -> " + type);
+			logger.warning ("Erreur lors de l'envoi du type -> " + type);
 		}
 	}
-	
 }

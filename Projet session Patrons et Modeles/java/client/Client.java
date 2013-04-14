@@ -4,6 +4,7 @@ import interfaces.BrokerInterface;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Observable;
 
@@ -15,11 +16,12 @@ import javax.xml.ws.Service;
 import commun.Information;
 
 
+
 /**
  * 
  * Le client qui va s'abonner au broker.
  * 
- * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
+ * @author Valentin Brémond, Gaylord Cherencey, Florian Massacret
  * 
  * @version 1.0
  *
@@ -44,15 +46,12 @@ public class Client extends Observable
 	/**
 	 * Liste des types d'information present sur le broker.
 	 */
-	private String[] listeTypesInformation;
+	private HashSet<String> listeTypesInformation;
 	
-	/**
-	 * Liste des services auxquels le client veut souscrire.
-	 */
-	private HashSet<String> listeServiceAsouscrire = new HashSet<String>();
 	
 	
 	// CONSTRUCTEURS
+	
 	
 	
 	/**
@@ -69,7 +68,7 @@ public class Client extends Observable
 		// On tente de s'y connecter
 		try
 		{
-			this.setInterfaceBroker(connexionBroker (urlBroker));
+			this.interfaceBroker = connexionBroker (urlBroker);
 		}
 		catch (MalformedURLException e)
 		{
@@ -78,27 +77,18 @@ public class Client extends Observable
 			System.exit (0);
 		}
 		
-		// On s'abonne au broker
-		if (!this.getInterfaceBroker().sAbonner ())
-		{
-			// Si on ne peut pas s'abonner, on affiche une erreur
-			JOptionPane.showMessageDialog (null, "Impossible de s'abonner au contenu.", "Erreur de contenu", JOptionPane.ERROR_MESSAGE);
-			System.exit (0);
-		}
+		// On récupère les types d'informations disponibles
+		this.listeTypesInformation = new HashSet<String> (Arrays.asList (this.interfaceBroker.recupererTypesInformations ()));
 		
-		//On recupere les types d'informations disponibles
-		if(this.getInterfaceBroker().recupererTypesInformation().length == 0 ){
-			// Si on ne peut pas s'abonner, on affiche une erreur
+		// Si le broker ne propose aucun type d'information, on affiche un message
+		if (this.listeTypesInformation.isEmpty ())
+		{
 			JOptionPane.showMessageDialog (null, "Pas de service disponible pour le moment.", "Erreur de fournisseur", JOptionPane.ERROR_MESSAGE);
 			System.exit (0);
-		}
+		}	
 		
-		//On recupere la liste des types de services proposes par les fournisseurs
-		this.setListeTypesInformation(this.getInterfaceBroker().recupererTypesInformation());	
-		
-		//On demarre la fenetre permettant les choix de services
-		new ClientGraphiqueChoixService(this);
-		
+		// On affiche la fenêtre permettant les choix de services
+		new ClientGraphiqueChoixService(this, listeTypesInformation);
 	}
 	
 	
@@ -142,14 +132,47 @@ public class Client extends Observable
 		deleteObserver (clientGraphique);
 		
 		// On se désabonne du broker
-		getInterfaceBroker().seDesabonner ();
+		this.interfaceBroker.seDesabonner ();
 		
 		// Puis on quitte
 		System.exit (0);
 	}
 	
 	
-	//GETTER & SETTER
+	
+	/**
+	 * Permet de définir la liste des types auxquels l'utilisateur veut souscrire.
+	 * Cette méthode a pour effet de souscrire aux types demandés auprès du broker puis de lancer la fenêtre d'affichage des informations.
+	 * 
+	 * @param typesInformationsChoisis Les types d'informations que l'utilisateur a choisi.
+	 */
+	protected void choisirTypesInformations (HashSet<String> typesInformationsChoisis)
+	{
+		Object[] liste = typesInformationsChoisis.toArray ();
+		
+		// On s'abonne au broker
+		if (!this.interfaceBroker.sAbonner (Arrays.copyOf (liste, liste.length, String[].class)))
+		{
+			// Si on ne peut pas s'abonner, on affiche une erreur
+			JOptionPane.showMessageDialog (null, "Impossible de s'abonner au contenu.", "Erreur de contenu", JOptionPane.ERROR_MESSAGE);
+			System.exit (0);
+		}
+		
+		// Puis on affiche la fenêtre
+		new ClientGraphique (this);
+	}
+	
+	
+	
+	public static void main (String[] args)
+	{
+		new Client ();
+	}
+	
+	
+	
+	// GETTERS & SETTERS
+	
 	
 	
 	/**
@@ -176,62 +199,4 @@ public class Client extends Observable
 	{
 		return this.info;
 	}
-	
-	
-	
-	/**
-	 * Permet de recuperer l'instance de brokerInterface
-	 * @return the interfaceBroker
-	 */
-	public BrokerInterface getInterfaceBroker() {
-		return interfaceBroker;
-	}
-
-
-	
-	/**
-	 * Permet de changer l'instance de brokerInterface
-	 * @param interfaceBroker the interfaceBroker to set
-	 */
-	public void setInterfaceBroker(BrokerInterface interfaceBroker) {
-		this.interfaceBroker = interfaceBroker;
-	}
-	
-	
-	
-	/**
-	 * Permet de recuperer la liste des services auxquels le client veut souscrire
-	 * @return the listeServiceAsouscrire
-	 */
-	public HashSet<String> getListeServiceAsouscrire() {
-		return this.listeServiceAsouscrire;
-	}
-	
-	
-
-	/**
-	 * Permet de recuperer la liste des types de service disponible
-	 * @return the listeServiceAsouscrire
-	 */
-	public String [] getListeTypesInformation() {
-		return this.listeTypesInformation;
-	}	
-	
-	
-	
-	/**
-	 * Permet de changer la liste des types de service disponible
-	 * @param typesInformation the typesInformation to set
-	 */
-	public void setListeTypesInformation(String[] typesInformation) {
-		this.listeTypesInformation = typesInformation;
-	}
-	
-	
-	
-	public static void main (String[] args)
-	{
-		new Client ();
-	}
-
 }

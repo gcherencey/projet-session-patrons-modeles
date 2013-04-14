@@ -12,7 +12,7 @@ import commun.Information;
  * 
  * Implémente l'interface du client.
  * 
-  * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
+ * @author Florian Massacret, Valentin Brémond, Gaylord Cherencey
  * 
  * @version 1.0
  *

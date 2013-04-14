@@ -49,8 +49,8 @@ public class Fournisseur
 	    //On envoie dans un premier temps tout les types qui seront envoyes par la suite au broker
 	    for (int i=0; i<10; i++)
 	    {
-	    	info.setType(i);
-	    	broker.ajouterTypeInformation(info.getTypeToString());
+	    	info.setType (i);
+	    	broker.ajouterTypeInformation (info.getTypeToString ());
 	    }
 	    
 	    // On envoie des informations en boucle
@@ -58,9 +58,8 @@ public class Fournisseur
 	    {
 	    	// Toutes les secondes on envoie la nouvelle information au broker
 	    	for(int i=0; i<10; i++)
-	    	{	    		
-	    		info.setType((int) (Math.random () * 10));
-	    		info.setInformation("Information : " + i);
+	    	{
+	    		info = new Information ((int) (Math.random () * 10), "Information : " + i);
 	    		
 	    		broker.envoyerInformation (info);
 	    		
