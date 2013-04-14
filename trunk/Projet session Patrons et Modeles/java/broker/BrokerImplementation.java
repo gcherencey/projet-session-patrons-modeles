@@ -1,5 +1,10 @@
 package broker;
 
+import interfaces.BrokerInterface;
+
+import java.util.Arrays;
+import java.util.HashSet;
+
 import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.xml.ws.WebServiceContext;
@@ -7,17 +12,18 @@ import javax.xml.ws.handler.MessageContext;
 
 import commun.Information;
 
-/* 
+
+
+/** 
 * Implémente l'interface du broker.
 * 
- * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
+* @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
 * 
 * @version 1.0
 *
 */
-
 @WebService (endpointInterface = "interfaces.BrokerInterface")
-public class BrokerImplementation implements interfaces.BrokerInterface
+public class BrokerImplementation implements BrokerInterface
 {
 	@Resource
 	WebServiceContext ws;
@@ -45,15 +51,16 @@ public class BrokerImplementation implements interfaces.BrokerInterface
 	
 	
 	
-	//METHODES
+	// MÉTHODES
 	
 	
 	
 	@Override
-	public boolean sAbonner ()
+	public boolean sAbonner (String[] listeTypesInformations)
 	{
 		MessageContext mc = ws.getMessageContext ();
-		return broker.sAbonner (mc);
+		
+		return broker.sAbonner (mc, new HashSet<String> (Arrays.asList (listeTypesInformations)));
 	};
 	
 	
@@ -65,12 +72,6 @@ public class BrokerImplementation implements interfaces.BrokerInterface
 		return broker.seDesabonner (mc);	
 	};
 	
-	@Override
-	public boolean souscrireAdesServices (String[] listeServiceAsouscrire)
-	{
-		MessageContext mc = ws.getMessageContext ();
-		return broker.souscrireAdesServices (mc, listeServiceAsouscrire);
-	};
 		
 	
 	@Override
@@ -84,14 +85,17 @@ public class BrokerImplementation implements interfaces.BrokerInterface
 	@Override
 	public boolean ajouterTypeInformation (String type)
 	{	
-		return broker.ajouterTypeInformation(type);
+		return broker.ajouterTypeInformation (type);
 	}
 	
 	
 	
 	@Override
-	public String[] recupererTypesInformation (){
-		return broker.recupererTypesInformation();
+	public String[] recupererTypesInformations ()
+	{
+		Object[] liste = broker.recupererTypesInformations ().toArray ();
+		
+		return Arrays.copyOf(liste, liste.length, String[].class);
 	}
 	
 }

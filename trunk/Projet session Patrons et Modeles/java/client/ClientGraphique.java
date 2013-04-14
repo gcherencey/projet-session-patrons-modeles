@@ -22,12 +22,12 @@ import commun.Information;
  * 
  * La fenêtre qui va afficher les informations liees au services choisis.
  * 
- * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
+ * @author Valentin Brémond, Gaylord Cherencey, Florian Massacret
  * 
  * @version 1.0
  *
  */
-public class ClientGraphique extends JFrame implements ActionListener,Observer
+public class ClientGraphique extends Graphique implements Observer,ActionListener
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -102,13 +102,12 @@ public class ClientGraphique extends JFrame implements ActionListener,Observer
 		
 		if (evenement == boutonFermer)
 		{
-			// Si l'utilisateur veut fermer la fenêtre, on quitte l'application
-			this.dispose ();
-			
-			client.fermerConnexion (this);
+			fermerFenetre ();
 		}
 		
 	}
+	
+	
 	
 	@Override
 	public void update (Observable arg0, Object arg1)
@@ -119,5 +118,15 @@ public class ClientGraphique extends JFrame implements ActionListener,Observer
 		// Puis on l'affiche
 		this.textarea.append ("(" + info.getTypeToString () + ") " + info.getInformation () + "\n");
 		this.validate ();
+	}
+
+
+
+	@Override
+	protected void fermerFenetre ()
+	{
+		this.dispose ();
+		
+		client.fermerConnexion (this);
 	}
 }

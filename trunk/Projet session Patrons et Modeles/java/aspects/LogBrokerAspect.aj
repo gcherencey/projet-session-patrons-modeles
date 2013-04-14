@@ -14,7 +14,7 @@ import commun.Information;
  **/
 
 public aspect LogBrokerAspect
-{		
+{
 		//Creation du logger
 		Logger logger =  FormatLog.createLogger ();
 		

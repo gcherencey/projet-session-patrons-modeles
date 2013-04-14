@@ -46,7 +46,10 @@ public aspect LogClientAspect
 	 */
 	before () : call (* System.exit (..))
 	{
-		log.info ("Application client terminée");
+		if (thisEnclosingJoinPointStaticPart.getSignature ().getDeclaringType ().equals (Client.class))
+		{
+			log.info ("Application client terminée.");
+		}
 	}
 	
 	
@@ -64,7 +67,7 @@ public aspect LogClientAspect
 		
 		retour = proceed (urlBroker);
 		
-		log.info ("Connexion réussie au serveur " + urlBroker);
+		log.info ("Connexion réussie au serveur " + urlBroker + ".");
 		
 		return retour;
 	}
@@ -74,7 +77,7 @@ public aspect LogClientAspect
 	/**
 	 * Se déclenche lors de l'abonnement.
 	 */
-	boolean around () : call (boolean BrokerInterface.sAbonner ())
+	boolean around () : call (boolean BrokerInterface.sAbonner (..))
 	{
 		boolean retour;
 		
@@ -84,11 +87,11 @@ public aspect LogClientAspect
 		
 		if (retour)
 		{
-			log.info ("Abonnement réussi");
+			log.info ("Abonnement réussi.");
 		}
 		else
 		{
-			log.warning ("Abonnement impossible");
+			log.warning ("Abonnement impossible.");
 		}
 		
 		return retour;
@@ -103,7 +106,7 @@ public aspect LogClientAspect
 	 */
 	before (Information info) : call (void Client.setInfo (Information)) && args (info)
 	{
-		log.info ("Information reçue : '[" + info.getTypeToString() + "] " + info.getInformation() + "'");
+		log.info ("Information reçue : '[" + info.getTypeToString() + "] " + info.getInformation() + "'.");
 	}
 	
 	
@@ -121,11 +124,11 @@ public aspect LogClientAspect
 		
 		if (retour)
 		{
-			log.info ("Désabonnement réussi");
+			log.info ("Désabonnement réussi.");
 		}
 		else
 		{
-			log.warning ("Désabonnement impossible");
+			log.warning ("Désabonnement impossible.");
 		}
 		
 		return retour;
