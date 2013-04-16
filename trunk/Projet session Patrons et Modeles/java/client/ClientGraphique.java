@@ -54,6 +54,8 @@ public class ClientGraphique extends Graphique implements Observer,ActionListene
 	 */
 	public ClientGraphique (Client client)
 	{
+		super ();
+		
 		// On demande à être informé à chaque nouveau message reçu
 		this.client = client;
 		client.addObserver (this);
