@@ -32,7 +32,7 @@ public aspect LogBrokerAspect
 		
 		pointcut loggCallseDesabonne () : call (boolean broker.Broker.seDesabonner (..));
 	    
-		pointcut loggCallReceptionTypes () : call (  BrokerImplementation.recupererTypesInformations()) && within(Broker);
+		pointcut loggCallReceptionTypes () : call (*  BrokerImplementation.recupererTypesInformations()) && within(Broker);
 		
 		//ADVICES
 		
@@ -49,7 +49,7 @@ public aspect LogBrokerAspect
 		//Affichage de l'adresse IP destination apres appel de la methode Iterator.next () dans la classe Broker
 		after (Object adresseClient) returning (boolean resultat) : loggGetIP (adresseClient)
 		{
-			logger.info ("Adresse destination -> " + adresseClient);
+			logger.info ("Adresse destination -> " + (String) adresseClient);
 		}
 		
 		//Affichage de messages apres appel de la methode envoyerInformation dans la classe Broker
