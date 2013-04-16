@@ -66,6 +66,8 @@ public class ClientGraphiqueChoixService extends Graphique implements ActionList
 	 */
 	public ClientGraphiqueChoixService (Client client, HashSet<String> listeTypesInformations)
 	{
+		super ();
+		
 		this.client = client;
 		this.listeTypesInformations = listeTypesInformations;
 		
