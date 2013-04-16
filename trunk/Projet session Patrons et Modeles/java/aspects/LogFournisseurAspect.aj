@@ -1,11 +1,12 @@
 package aspects;
 
-import fournisseur.Fournisseur;
 import interfaces.BrokerInterface;
 
 import java.util.logging.Logger;
 
 import commun.FormatLog;
+
+import fournisseur.Fournisseur;
 
 /**
  * Aspect gerant le comportement des methodes selon leurs retours de la classe Fournisseur
@@ -19,7 +20,7 @@ public aspect LogFournisseurAspect
 		
 	//POINTCUT
 	
-	pointcut loggCallEnvoiType (String type) : call (boolean BrokerInterface.ajouterTypeInformation (String)) && args(type) && within(Fournisseur);
+	pointcut loggCallEnvoiType (String type) : call (boolean Fournisseur.ajouterTypeInformation (String)) && args(type);
 	
 	//ADVICES
 	

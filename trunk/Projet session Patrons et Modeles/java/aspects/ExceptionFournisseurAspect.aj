@@ -19,18 +19,21 @@ public aspect ExceptionFournisseurAspect
 	
 	//POINTCUT
 	 
-	pointcut LoggCallMain() : execution(public void Fournisseur.main(..));
+	pointcut LoggCallMain() : execution (public void Fournisseur.main(..));
 	
 	//ADVICES
 	
-	void around() : LoggCallMain() 
+	after () throwing (Exception e): LoggCallMain ()
 	{
-		try {
-				proceed();
-			} catch(WebServiceException e) {
-				logger.severe("Connection perdue avec le broker");
-			}catch(MalformedURLException e) {
-				logger.severe("URL invalide, impossible d'envoyer l'information a cette adresse");
-	  		}
-	  }
+		if (e.getClass ().equals (WebServiceException.class))
+		{
+			logger.severe("Connection perdue avec le broker");
+		}
+		else if (e.getClass ().equals (MalformedURLException.class))
+		{
+			logger.severe("URL invalide, impossible d'envoyer l'information a cette adresse");
+		}
+		
+		System.exit (0);
+	}
 }
