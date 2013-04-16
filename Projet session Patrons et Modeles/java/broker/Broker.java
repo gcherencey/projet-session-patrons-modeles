@@ -178,9 +178,8 @@ public class Broker
 					// Si le client a souscrit à au moins un type d'information
 					if (!this.adressesIPClient.get(adresseClient).isEmpty())
 					{
-						//System.out.println ("");
 						// Si le client a souscrit à ce type d'information, on lui envoie
-						if (this.adressesIPClient.get (adresseClient).contains (info.getTypeToString ()))
+						if (this.adressesIPClient.get(adresseClient).contains (info.getTypeToString ()))
 						{				
 							// On fait appel à la methode distante
 							client.envoyerInformation(info);

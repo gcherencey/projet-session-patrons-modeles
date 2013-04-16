@@ -1,8 +1,9 @@
 package aspects;
 
-import java.util.logging.Logger;
+import fournisseur.Fournisseur;
+import interfaces.BrokerInterface;
 
-import broker.Broker;
+import java.util.logging.Logger;
 
 import commun.FormatLog;
 
@@ -18,7 +19,7 @@ public aspect LogFournisseurAspect
 		
 	//POINTCUT
 	
-	pointcut loggCallEnvoiType (String type) : call (boolean Broker.ajouterTypeInformation (String)) && args(type);
+	pointcut loggCallEnvoiType (String type) : call (boolean BrokerInterface.ajouterTypeInformation (String)) && args(type) && within(Fournisseur);
 	
 	//ADVICES
 	
