@@ -1,9 +1,13 @@
 package aspects;
 
-import java.util.Iterator;
+import interfaces.ClientInterface;
+
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.logging.Logger;
 
 import broker.Broker;
+import broker.BrokerImplementation;
 
 import commun.FormatLog;
 import commun.Information;
@@ -20,21 +24,32 @@ public aspect LogBrokerAspect
 		
 		//POINTCUTS
 		
-		pointcut loggCallEnvoi (Information info, Broker broker) : call (boolean Broker.envoyerInformation (Information)) && args (info) && target (broker);
+		pointcut loggCallEnvoi (Information info, Broker broker) : execution (boolean ClientInterface.envoyerInformation (Information)) && args (info) && target (broker);
 		
-		pointcut loggCallsAbonne (): call (boolean Broker.sAbonner (..));
+		pointcut loggCallsAbonne (HashSet<String> listeTypesInformations): execution (boolean Broker.sAbonner (.., HashSet<String>)) && args (.., listeTypesInformations);
 		
-		pointcut loggGetIP () : call (Object Iterator.next ()) && this (Broker);
+		pointcut loggGetIP (Object adresseClient) : execution (boolean HashMap.get(Object)) && args(adresseClient);
 		
 		pointcut loggCallseDesabonne () : call (boolean broker.Broker.seDesabonner (..));
 	    
+		pointcut loggCallReceptionTypes () : call (  BrokerImplementation.recupererTypesInformations()) && within(Broker);
+		
+		//ADVICES
+		
+		after () returning (HashSet<String> listeTypesInformation) : loggCallReceptionTypes ()
+		{
+			logger.info(listeTypesInformation.toString());
+		}
+		
+		
+		
 		
 		//ADVICES
 		
 		//Affichage de l'adresse IP destination apres appel de la methode Iterator.next () dans la classe Broker
-		after () returning (Object o) : loggGetIP ()
+		after (Object adresseClient) returning (boolean resultat) : loggGetIP (adresseClient)
 		{
-			logger.info ("Adresse destination -> " + o.toString ());
+			logger.info ("Adresse destination -> " + adresseClient);
 		}
 		
 		//Affichage de messages apres appel de la methode envoyerInformation dans la classe Broker
@@ -60,11 +75,12 @@ public aspect LogBrokerAspect
 		}
 	    
 		//Affichage de messages apres appel de la methode sAbonner dans la classe Broker
-		after () returning (boolean reponse) : loggCallsAbonne ()
+		after (HashSet<String> listeTypesInformations) returning (boolean reponse) : loggCallsAbonne (listeTypesInformations)
 		{
 			if (reponse)
 			{
 				logger.info ("Client rajoute avec succes");
+				logger.info ("Le client a souscrit aux services: " + listeTypesInformations.toString());
 	    	}  
 	    	else
 	    	{
