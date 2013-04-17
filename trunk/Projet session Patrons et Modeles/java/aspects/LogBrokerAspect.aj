@@ -2,102 +2,103 @@ package aspects;
 
 import interfaces.ClientInterface;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.logging.Logger;
 
 import broker.Broker;
-import broker.BrokerImplementation;
 
 import commun.FormatLog;
 import commun.Information;
 
-/**
- * Aspect gerant le comportement des methodes selon leurs retours de la classe Broker
- * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
- **/
 
-public aspect LogBrokerAspect
-{
-		//Creation du logger
-		Logger logger =  FormatLog.createLogger ();
+public aspect LogBrokerAspect {
+
+	//Creation du logger
+	Logger logger =  FormatLog.createLogger ();
 		
-		//POINTCUTS
+	//POINTCUTS
 		
-		pointcut loggCallEnvoi (Information info, Broker broker) : execution (boolean ClientInterface.envoyerInformation (Information)) && args (info) && target (broker);
+	pointcut loggCallDemarrage(): call (Broker.new(..));
+	
+	pointcut loggCallsAbonne (HashSet<String> listeTypesInformations): execution (boolean Broker.sAbonner (.., HashSet<String>)) && args (.., listeTypesInformations);
+	
+	pointcut loggCallAjoutType (String type) : execution (boolean Broker.ajouterTypeInformation (String)) && args(type);
+	
+	pointcut loggCallRecupererTypesInformations () : execution (HashSet<String> Broker.recupererTypesInformations ());
+
+	pointcut loggCallEnvoi (ClientInterface client, String adresseClient, Information info) : call (void Broker.envoieAuClient(ClientInterface, String , Information)) && args (client, adresseClient ,info);
+	
+	pointcut loggCallseDesabonne () : call (boolean broker.Broker.seDesabonner (..));
 		
-		pointcut loggCallsAbonne (HashSet<String> listeTypesInformations): execution (boolean Broker.sAbonner (.., HashSet<String>)) && args (.., listeTypesInformations);
-		
-		pointcut loggGetIP (Object adresseClient) : execution (boolean HashMap.get(Object)) && args(adresseClient);
-		
-		pointcut loggCallseDesabonne () : call (boolean broker.Broker.seDesabonner (..));
-	    
-		pointcut loggCallReceptionTypes () : call (*  BrokerImplementation.recupererTypesInformations()) && within(Broker);
-		
-		//ADVICES
-		
-		after () returning (HashSet<String> listeTypesInformation) : loggCallReceptionTypes ()
+	//ADVICES
+	
+	before () : loggCallDemarrage()
+	{
+		logger.info ("Demarrage du broker");
+		logger.info ("En attente d'un nouveau client...");
+	}
+	
+	//Affichage de messages apres appel de la methode sAbonner dans la classe Broker
+	after (HashSet<String> listeTypesInformations) returning (boolean reponse) : loggCallsAbonne (listeTypesInformations)
+	{
+		if (reponse)
 		{
-			logger.info(listeTypesInformation.toString());
+			logger.info ("Client rajoute avec succes");
+			logger.info ("Le client a souscrit aux services: " + listeTypesInformations.toString());
+	   	}  
+	   	else
+	   	{
+	   		logger.info ("Erreur lors de l'ajout du client");
+	   	}
+	}
+	
+	
+	//Afficher les services ajoutes par le fournisseur
+	after(String type) returning (boolean reponse) : loggCallAjoutType (type)
+	{
+		if(reponse)
+		{
+			logger.info("Nouveau service disponible -> " + type);
+		}
+		else
+		{
+			logger.warning("Le service [" + type + "] n'a pu etre ajouter (peut etre est-il deja present)");
+		}
+	}
+	
+	//Affichage des types d'information par le broker
+	after () returning (HashSet<String> listeTypeInformations) : loggCallRecupererTypesInformations()
+	{
+		if(!listeTypeInformations.isEmpty())
+		{
+			logger.info("Services proposes -> " + listeTypeInformations.toString());
 		}
 		
-		
-		
-		
-		//ADVICES
-		
-		//Affichage de l'adresse IP destination apres appel de la methode Iterator.next () dans la classe Broker
-		after (Object adresseClient) returning (boolean resultat) : loggGetIP (adresseClient)
+		else
 		{
-			logger.info ("Adresse destination -> " + (String) adresseClient);
+			logger.info("Erreur lors de la reception des services");
 		}
-		
-		//Affichage de messages apres appel de la methode envoyerInformation dans la classe Broker
-		after (Information info, Broker broker) returning (boolean reponse) : loggCallEnvoi (info, broker)
+	}
+	
+	
+	//Affichage de messages apres appel de la methode envoyerInformation dans la classe Broker
+	after (ClientInterface client, String adresseClient, Information info) : loggCallEnvoi (client, adresseClient ,info)
+	{
+		logger.info("Envoi du message -> [" + info.getTypeToString() + "] " + info.getInformation());
+		logger.info("Adresse destination -> " + adresseClient);
+	}
+
+	
+	//Affichage de messages selon comportement de la methode seDesabonner dans la classe Broker
+	after () returning (boolean reponse) : loggCallseDesabonne ()
+	{
+		if (reponse)
 		{
-			//Si il n'y a pas de client connecte, on affiche "Aucun client n'est connecte"
-			if (!broker.auMoinsUnClient ())
-			{
-				logger.info ("Aucun client n'est connecte.");
-			}
-			else
-			{
-				//Si le message a bien ete envoye on affiche le message en question
-				if (reponse == true)
-				{
-					logger.info ("Message ->  [" + info.getTypeToString() + "] "+ info.getInformation() + " envoyee avec succes");
-				}
-				else
-				{
-					logger.info ("URL invalide, impossible d'envoyer l'information a cette adresse");
-				}
-			}
-		}
-	    
-		//Affichage de messages apres appel de la methode sAbonner dans la classe Broker
-		after (HashSet<String> listeTypesInformations) returning (boolean reponse) : loggCallsAbonne (listeTypesInformations)
-		{
-			if (reponse)
-			{
-				logger.info ("Client rajoute avec succes");
-				logger.info ("Le client a souscrit aux services: " + listeTypesInformations.toString());
-	    	}  
-	    	else
-	    	{
-	    		logger.info ("Erreur lors de l'ajout du client");
-	    	}
-		}
-	      
-		//Affichage de messages selon comportement de la methode seDesabonner dans la classe Broker
-		after () returning (boolean reponse) : loggCallseDesabonne ()
-		{
-			if (reponse)
-			{
-				logger.info ("Client desabonne avec succes");
-	    	}
-	    	else
-	    	{
-	    		logger.info ("Erreur lors de la suppression du client");
-	    	}
-		}
+			logger.info ("Client desabonne avec succes");
+    	}
+    	else
+    	{
+    		logger.info ("Erreur lors de la suppression du client");
+    	}
+	}
 }
