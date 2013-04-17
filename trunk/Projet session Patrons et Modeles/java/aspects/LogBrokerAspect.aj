@@ -34,7 +34,7 @@ public aspect LogBrokerAspect {
 	
 	before () : loggCallDemarrage()
 	{
-		logger.info ("Demarrage du broker");
+		logger.info ("Démarrage du broker");
 		logger.info ("En attente d'un nouveau client...");
 	}
 	
@@ -43,8 +43,8 @@ public aspect LogBrokerAspect {
 	{
 		if (reponse)
 		{
-			logger.info ("Client rajoute avec succes");
-			logger.info ("Le client a souscrit aux services: " + listeTypesInformations.toString());
+			logger.info ("Client rajouté avec succès");
+			logger.info ("Le client a souscrit aux types : " + listeTypesInformations.toString());
 	   	}  
 	   	else
 	   	{
@@ -58,11 +58,11 @@ public aspect LogBrokerAspect {
 	{
 		if(reponse)
 		{
-			logger.info("Nouveau service disponible -> " + type);
+			logger.info("Nouveau type disponible -> " + type);
 		}
 		else
 		{
-			logger.warning("Le service [" + type + "] n'a pu etre ajouter (peut etre est-il deja present)");
+			logger.warning("Le type [" + type + "] n'a pu être ajouté (peut-être est-il déjà présent)");
 		}
 	}
 	
@@ -71,12 +71,12 @@ public aspect LogBrokerAspect {
 	{
 		if(!listeTypeInformations.isEmpty())
 		{
-			logger.info("Services proposes -> " + listeTypeInformations.toString());
+			logger.info("Types proposés -> " + listeTypeInformations.toString());
 		}
 		
 		else
 		{
-			logger.info("Erreur lors de la reception des services");
+			logger.info("Erreur lors de la réception des types");
 		}
 	}
 	
@@ -94,7 +94,7 @@ public aspect LogBrokerAspect {
 	{
 		if (reponse)
 		{
-			logger.info ("Client desabonne avec succes");
+			logger.info ("Client désabonné avec succès");
     	}
     	else
     	{

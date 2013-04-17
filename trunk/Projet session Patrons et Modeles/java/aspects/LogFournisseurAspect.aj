@@ -25,6 +25,16 @@ public aspect LogFournisseurAspect
 	
 	//ADVICES
 	
+	
+
+	/**
+	 * Se déclenche lors du démarrage de l'application.
+	 */
+	before () : call (Fournisseur.new (..))
+	{
+		logger.info ("Démarrage du fournisseur...");
+	}
+	
 	after (String type) returning (boolean reponse) : loggCallEnvoiType (type)
 	{
 		if(reponse)
@@ -33,7 +43,7 @@ public aspect LogFournisseurAspect
 		}
 		else
 		{
-			logger.warning ("Le service [" + type + "] n'a pu etre envoye (peut etre est-il deja present sur le broker)");
+			logger.warning ("Le service [" + type + "] n'a pu être envoyé (peut etre est-il deja present sur le broker)");
 		}
 	}
 	
