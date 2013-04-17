@@ -24,8 +24,6 @@ public class Fournisseur
 {
 	private BrokerInterface broker;
 	
-	
-	
 	public Fournisseur () throws MalformedURLException, InterruptedException 
 	{
 		// L'information qui sera transmise
@@ -67,11 +65,11 @@ public class Fournisseur
 	
 	
 	
-	
 	private boolean ajouterTypeInformation (String type)
 	{
 		return this.broker.ajouterTypeInformation (type);
 	}
+	
 	
 	
 	private boolean envoyerInformation (Information info)
