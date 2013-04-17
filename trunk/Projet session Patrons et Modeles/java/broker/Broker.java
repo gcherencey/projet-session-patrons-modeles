@@ -28,14 +28,6 @@ import commun.Information;
  *
  */
 
-/**
- * @author Utilisateur
- *
- */
-/**
- * @author Utilisateur
- *
- */
 public class Broker
 {
 	/**
@@ -47,6 +39,11 @@ public class Broker
 	 * Permet de stocker les types d'informations auxquels un client souscrit.
 	 */
 	private HashSet<String> typesInformation;
+	
+	/**
+	 * Permet un appel distant des methode client
+	 */
+	private ClientInterface client;
 	
 	
 	
@@ -156,6 +153,7 @@ public class Broker
 		{
 			return true;
 		}
+		
 		else
 		{
 			// Pour chaque client présent dans la liste, on envoie l'information selon ses souscriptions
@@ -172,19 +170,19 @@ public class Broker
 					// On crée le service
 					Service service = Service.create (url, qname);
 			    
-					// On crée une instance de l'interface client
-					ClientInterface client = service.getPort (ClientInterface.class);
+					//On affecte le service au client
+					this.client = service.getPort (ClientInterface.class);
 					
-					// Si le client a souscrit à au moins un type d'information
 					if (!this.adressesIPClient.get(adresseClient).isEmpty())
 					{
 						// Si le client a souscrit à ce type d'information, on lui envoie
 						if (this.adressesIPClient.get(adresseClient).contains (info.getTypeToString ()))
-						{				
-							// On fait appel à la methode distante
-							client.envoyerInformation(info);
-						}						
+						{	
+								// Si le client a souscrit à au moins un type d'information
+								envoieAuClient(this.client, adresseClient, info);
+						}
 					}
+					
 				}
 				catch (MalformedURLException e)
 				{
@@ -196,6 +194,18 @@ public class Broker
 		}
 	}
 	
+	
+	/**
+	 * Methode local qui permet d'envoyer une information a un client.
+	 * 
+	 * @param client instance de ClientInterface qui permet l'appel des methode distance du client
+	 * @param adresseClient correspond a l'adresse IP du client distant
+	 * @param info contient l'information (type, message)
+	 */
+	private void envoieAuClient(ClientInterface client, String adresseClient, Information info )
+	{
+		this.client.envoyerInformation(info);
+	}
 	
 	
 	/**
