@@ -6,12 +6,17 @@ import javax.xml.ws.WebServiceException;
 import commun.FormatLog;
 import fournisseur.Fournisseur;
 
+
+
 /**
- * Aspect gerant le comportement des exceptions de la classe Fournisseur
- * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
+ * 
+ * Aspect gérant le comportement des exceptions de la classe Fournisseur
+ * 
+ * @author Gaylord Cherencey, Valentin Brémond, Florian Massacret
+ *
+ * @version 1.0
  *
  */
-
 public aspect ExceptionFournisseurAspect
 {
 	//Creation du logger

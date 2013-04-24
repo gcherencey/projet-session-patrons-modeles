@@ -11,11 +11,12 @@ import javax.xml.ws.Service;
 import commun.Information;
 
 
+
 /**
  * 
  * Le fournisseur qui va envoyer les informations.
  * 
- * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
+ * @author Gaylord Cherencey, Valentin Brémond, Florian Massacret
  * 
  * @version 2.0
  *

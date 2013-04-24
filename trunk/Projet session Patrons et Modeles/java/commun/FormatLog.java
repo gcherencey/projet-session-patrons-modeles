@@ -8,10 +8,15 @@ import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+
+
 /**
- * Classe definissant le format des messages logs
  * 
- * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
+ * Classe définissant le format des messages logs.
+ * 
+ * @author Gaylord Cherencey, Valentin Brémond, Florian Massacret
+ *
+ * @version 1.0
  *
  */
 public class FormatLog extends Formatter

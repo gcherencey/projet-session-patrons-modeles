@@ -13,7 +13,7 @@ import commun.Information;
  * 
  * Interface permettant à un client de se connecter ou à un fournisseur de fournir du contenu.
  * 
- * @author Valentin Brémond, Florian Massacret, Gaylord Cherencey
+ * @author Florian Massacret, Gaylord Cherencey, Valentin Brémond
  * 
  * @version 1.0
  *
