@@ -7,11 +7,17 @@ import commun.Information;
 
 import fournisseur.Fournisseur;
 
-/**
- * Aspect gerant le comportement des methodes selon leurs retours de la classe Fournisseur
- * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
- **/
 
+
+/**
+ * 
+ * Aspect gerant le comportement des methodes selon leurs retours de la classe Fournisseur.
+ * 
+ * @author Gaylord Cherencey, Valentin Brémond, Florian Massacret
+ * 
+ * @version 1.0
+ * 
+ */
 public aspect LogFournisseurAspect
 {
 	//Creation du logger

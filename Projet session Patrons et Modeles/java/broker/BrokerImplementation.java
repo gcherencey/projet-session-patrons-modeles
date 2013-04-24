@@ -15,13 +15,14 @@ import commun.Information;
 
 
 /** 
-* Implémente l'interface du broker.
-* 
-* @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
-* 
-* @version 1.0
-*
-*/
+ * 
+ * Implémente l'interface du broker.
+ * 
+ * @author Gaylord Cherencey, Valentin Brémond, Florian Massacret
+ * 
+ * @version 1.0
+ *
+ */
 @WebService (endpointInterface = "interfaces.BrokerInterface")
 public class BrokerImplementation implements BrokerInterface
 {

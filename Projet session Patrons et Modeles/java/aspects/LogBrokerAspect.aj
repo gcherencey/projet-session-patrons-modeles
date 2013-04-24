@@ -11,8 +11,18 @@ import commun.FormatLog;
 import commun.Information;
 
 
-public aspect LogBrokerAspect {
 
+/**
+ *
+ * Aspect gérant les logs du broker.
+ * 
+ * @author Gaylord Cherencey, Valentin Brémond, Florian Massacret
+ * 
+ * @version 1.0
+ *
+ */
+public aspect LogBrokerAspect
+{
 	//Creation du logger
 	Logger logger =  FormatLog.createLogger ();
 		

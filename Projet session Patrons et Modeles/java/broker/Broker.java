@@ -18,16 +18,16 @@ import com.sun.xml.internal.ws.developer.JAXWSProperties;
 import commun.Information;
 
 
+
 /**
  * 
  * Broker qui va gerer la transmission des info entre fournisseur et client.
  * 
- * @author CHERENCEY Gaylord, BREMOND Valentin, MASSACRET Florian
+ * @author Gaylord Cherencey, Valentin Brémond, Florian Massacret
  * 
  * @version 1.0
  *
  */
-
 public class Broker
 {
 	/**
